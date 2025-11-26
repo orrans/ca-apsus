@@ -5,6 +5,17 @@ import { NoteTodos } from './NoteTodos.jsx'
 export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote }) {
     return (
         <article className="note-preview" style={note.style}>
+            <div
+                className="pinned"
+                onClick={() => onUpdateNote({ ...note, isPinned: !note.isPinned })}>
+                <span
+                    className={
+                        (note.isPinned ? 'material-symbols-filled' : '') +
+                        ' material-symbols-outlined'
+                    }>
+                    keep
+                </span>
+            </div>
             {note.type === 'NoteTxt' && <NoteTxt info={note.info} />}
             {note.type === 'NoteImg' && <NoteImg info={note.info} />}
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
