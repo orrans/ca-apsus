@@ -7,7 +7,9 @@ export const utilService = {
     getDayName,
     getMonthName,
     loadFromStorage,
-    saveToStorage
+    saveToStorage,
+    isToday,
+    getTimeString
 }
 
 export function saveToStorage(key, val) {
@@ -72,6 +74,21 @@ export function getMonthName(date) {
     return monthNames[date.getMonth()]
 }
 
+export function isToday(date) {
+    const today = new Date();
+    const checkDate = new Date(date);
+    return checkDate.getDate() === today.getDate() &&
+        checkDate.getMonth() === today.getMonth() &&
+        checkDate.getFullYear() === today.getFullYear();
+}
+
+export function getTimeString(date) {
+    const d = new Date(date);
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    const seconds = String(d.getSeconds()).padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+}   
 
 export function debounce(func, delay) {
     let timeoutId
