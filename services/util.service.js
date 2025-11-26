@@ -10,16 +10,16 @@ export const utilService = {
     saveToStorage
 }
 
-function saveToStorage(key, val) {
+export function saveToStorage(key, val) {
     localStorage.setItem(key, JSON.stringify(val))
 }
 
-function loadFromStorage(key) {
+export function loadFromStorage(key) {
     const val = localStorage.getItem(key)
     return JSON.parse(val)
 }
 
-function makeId(length = 6) {
+export function makeId(length = 6) {
     var txt = ''
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
@@ -30,7 +30,7 @@ function makeId(length = 6) {
     return txt
 }
 
-function makeLorem(size = 100) {
+export function makeLorem(size = 100) {
     var words = ['The sky', 'above', 'the port', 'was', 'the color of television', 'tuned', 'to', 'a dead channel', '.', 'All', 'this happened', 'more or less', '.', 'I', 'had', 'the story', 'bit by bit', 'from various people', 'and', 'as generally', 'happens', 'in such cases', 'each time', 'it', 'was', 'a different story', '.', 'It', 'was', 'a pleasure', 'to', 'burn']
     var txt = ''
     while (size > 0) {
@@ -40,17 +40,17 @@ function makeLorem(size = 100) {
     return txt
 }
 
-function getRandomIntInclusive(min, max) {
+export function getRandomIntInclusive(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
     return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive 
 }
 
-function padNum(num) {
+export function padNum(num) {
     return (num > 9) ? num + '' : '0' + num
 }
 
-function getRandomColor() {
+export function getRandomColor() {
     const letters = '0123456789ABCDEF'
     var color = '#'
     for (let i = 0; i < 6; i++) {
@@ -59,15 +59,44 @@ function getRandomColor() {
     return color
 }
 
-function getDayName(date, locale) {
+export function getDayName(date, locale) {
     date = new Date(date)
     return date.toLocaleDateString(locale, { weekday: 'long' })
 }
 
 
-function getMonthName(date) {
+export function getMonthName(date) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ]
     return monthNames[date.getMonth()]
+}
+
+
+export function debounce(func, delay) {
+    let timeoutId
+    return (...args) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+            func(...args)
+        }, delay)
+    }
+}
+
+export function randomTrueFalse() {
+    return Math.random() >= 0.5
+}
+
+export function getData(url, cb) {
+    const xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            const ans = JSON.parse(xhr.responseText)
+            cb(ans)
+        }
+    }
+
+    xhr.open('GET', url, true)
+    xhr.send()
 }
