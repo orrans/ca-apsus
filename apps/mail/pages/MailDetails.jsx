@@ -1,4 +1,5 @@
-import { emailService } from "../../../services/email.service.js"
+import { emailService } from "../services/mail.service.js"
+import { eventBusService } from "../../../services/event-bus.service.js"
 const { useParams, useNavigate, Link } = ReactRouterDOM
 
 const { useState, useEffect } = React
@@ -14,16 +15,20 @@ export function MailDetails() {
         loadEmail()
     }, [emailId])
 
+
     function loadEmail() {
         setIsLoading(true)
         emailService.get(emailId)
-            .then(email => setEmail(email))
+            .then(email => {
+                setEmail(email)
+                eventBusService.emit('email-selected', email.id)
+            })
             .catch(err => console.log('err:', err))
             .finally(() => setIsLoading(false))
     }
 
-
     function onBack() {
+        eventBusService.emit('email-deselected')
         navigate('/mail')
     }
 

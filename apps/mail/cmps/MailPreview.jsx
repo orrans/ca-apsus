@@ -1,14 +1,14 @@
 import { LongText } from '../../../cmps/LongText.jsx'
 import { getDayName, isToday, getTimeString } from '../../../services/util.service.js'
-
+const { Link } = ReactRouterDOM
 export function EmailPreview({ email, onRemoveEmail, onReadEmail }) {
     const sentAt = new Date(email.sentAt)
     const isTodayFlag = isToday(sentAt)
     const timeString = getTimeString(sentAt)
-    console.log('isTodayFlag:', isTodayFlag)
-    console.log('sentAt:', sentAt)
+
     return (
-        <li className={`email-list-item ${email.isRead ? 'read' : ''}`} onClick={() => onReadEmail(email.id)}>
+        <li className={`email-list-item ${email.isRead ? 'read' : ''}`}>
+            <Link to={`/mail/${email.id}`}>
             {/* Part 1: From */}
             <div className="preview-from">
                 {email.from}
@@ -21,6 +21,7 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail }) {
             <div className="preview-date">
                 {isTodayFlag ? 'Today '+timeString : sentAt.toLocaleDateString()}
             </div>
+            </Link>
             <button title="Delete" onClick={() => onRemoveEmail(email.id)}>
                 <img src="../../../assets/img/trash-icon.svg" alt="Delete" />
             </button>

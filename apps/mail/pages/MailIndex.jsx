@@ -1,11 +1,10 @@
-import { emailService } from '../../../services/email.service.js'
+import { emailService } from '../services/mail.service.js'
 import { EmailList } from '../cmps/MailList.jsx'
-import { ComposeEmail } from '../cmps/ComposeEmail.jsx'
-import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
-import { MailDetails } from './MailDetails.jsx'
+import { ComposeEmail } from '../cmps/MailCompose.jsx'
+import { showSuccessMsg, showErrorMsg, eventBusService } from '../../../services/event-bus.service.js'
 
 const { useState, useEffect } = React
-const { useNavigate, useSearchParams, useParams } = ReactRouterDOM
+const { useNavigate, useSearchParams, Outlet } = ReactRouterDOM
 
 export function MailIndex() {
     const [emails, setEmails] = useState(null)
@@ -14,10 +13,24 @@ export function MailIndex() {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     const [unreadCount, setUnreadCount] = useState(0)
-    const { emailId } = useParams()
+    const [selectedMailId, setSelectedMailId] = useState(null)
 
     useEffect(() => {
         loadEmails()
+    }, [])
+
+    useEffect(() => {
+        // Listen for email selection (on load and on back)
+        const unsubscribeSelected = eventBusService.on('email-selected', (emailId) => {
+            setSelectedMailId(emailId)
+        })
+        const unsubscribeDeselected = eventBusService.on('email-deselected', () => {
+            setSelectedMailId(null)
+        })
+        return () => {
+            unsubscribeSelected()
+            unsubscribeDeselected()
+        }
     }, [])
 
     useEffect(() => {
@@ -26,20 +39,23 @@ export function MailIndex() {
         setUnreadCount(count)
     }, [emails])
 
-    useEffect(() => {   //set read if an email is opened
-        if (!emailId) return
-        emailService.readEmail(emailId).then(() => {
-            setEmails(prevEmails =>
-                prevEmails.map(prevEmail =>
-                    prevEmail.id === emailId ? { ...prevEmail, isRead: true } : prevEmail
-                )
-            )
-        })
-        .catch(err => {
-            console.log('err:', err)
-            showErrorMsg(`Failed to read email(${emailId})`)
-        })
-    }, [emailId, emails])
+    // useEffect(() => {
+    //     // Mark email as read when selected
+    //     if (!selectedMailId || !emails) return
+    //     emailService.readEmail(selectedMailId).then(() => {
+    //         setEmails(prevEmails =>
+    //             prevEmails.map(prevEmail =>
+    //                 prevEmail.id === selectedMailId ? { ...prevEmail, isRead: true } : prevEmail
+    //             )
+    //         )
+    //     })
+    //         .catch(err => {
+    //             console.log('err:', err)
+    //             showErrorMsg(`Failed to read email(${selectedMailId})`)
+    //         })
+    // }, [selectedMailId, emails])
+
+
 
     function loadEmails() {
         setIsLoading(true)
@@ -66,17 +82,14 @@ export function MailIndex() {
     }
 
     function onBack() {
+        setSelectedMailId(null)
         navigate('/mail')
     }
 
     function onReadEmail(emailId) {
+        setSelectedMailId(emailId)
         emailService.readEmail(emailId)
             .then(() => {
-                setEmails(emails =>
-                    emails.map(email =>
-                        email.id === emailId ? { ...email, isRead: true } : email
-                    )
-                )
                 navigate(`/mail/${emailId}`)
             })
             .catch(err => {
@@ -104,19 +117,15 @@ export function MailIndex() {
                     }
                 />
             )}
-
             <div className="unread-count">{`${unreadCount} unread emails`}</div>
-
-            {!emailId && (
+            {!selectedMailId && (
                 <EmailList
                     emails={emails}
                     onRemoveEmail={onRemoveEmail}
                     onReadEmail={onReadEmail}
                 />
             )}
-            {emailId && (
-                <MailDetails />
-            )}
+            <Outlet />
         </section>
     )
 }
