@@ -51,7 +51,12 @@ export function NoteIndex() {
     return (
         <section className="note-index">
             <CreateNoteForm onCreate={onCreateNote} />
-            <NoteList notes={notes} onRemove={onRemoveNote} onUpdateTodo={updateTodo} />
+            <NoteList
+                notes={notes}
+                onRemove={onRemoveNote}
+                onUpdateTodo={updateTodo}
+                onUpdateNote={onUpdateNote}
+            />
         </section>
     )
 }

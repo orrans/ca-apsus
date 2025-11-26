@@ -70,7 +70,7 @@ function _createNotes() {
                 type: 'NoteTxt',
                 isPinned: true,
                 style: {
-                    backgroundColor: '#fff',
+                    backgroundColor: '#ffffff',
                 },
                 info: {
                     txt: 'Fullstack Me Baby!',
@@ -82,7 +82,7 @@ function _createNotes() {
                 type: 'NoteImg',
                 isPinned: false,
                 style: {
-                    backgroundColor: '#fff',
+                    backgroundColor: '#ffffff',
                 },
                 info: {
                     url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
@@ -95,7 +95,7 @@ function _createNotes() {
                 type: 'NoteTodos',
                 isPinned: false,
                 style: {
-                    backgroundColor: '#fff',
+                    backgroundColor: '#ffffff',
                 },
                 info: {
                     title: 'Get my stuff together',
