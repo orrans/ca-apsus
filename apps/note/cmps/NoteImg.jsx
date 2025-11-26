@@ -3,6 +3,7 @@ export function NoteImg({ info }) {
         <div className="note-img">
             <img src={info.url} alt={info.title} style={{ maxWidth: '100%' }} />
             <h4>{info.title}</h4>
+            <p>{info.txt}</p>
         </div>
     )
 }
