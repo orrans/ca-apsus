@@ -1,0 +1,5 @@
+.note-preview{
+    border: 1px solid black;
+    break-inside: avoid;
+    margin-bottom: 10px;
+}

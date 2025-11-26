@@ -4,8 +4,6 @@ import { utilService } from '../../../services/util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
 
 const NOTE_KEY = 'noteDB'
-const CACHE_STORAGE_KEY = 'googleNotesCache'
-const gCache = utilService.loadFromStorage(CACHE_STORAGE_KEY) || {}
 _createNotes()
 
 export const noteService = {
@@ -60,14 +58,6 @@ function getDefaultFilter(filterBy = { title: '', minPrice: 0 }) {
     return { title: filterBy.title, minPrice: filterBy.minPrice }
 }
 
-function _saveDataToCache(key, data) {
-    gCache[key] = {
-        data,
-        lastFetched: Date.now(),
-    }
-    utilService.saveToStorage(CACHE_STORAGE_KEY, gCache)
-}
-
 // ~~~~~~~~~~~~~~~~LOCAL FUNCTIONS~~~~~~~~~~~~~~~~~~~
 
 function _createNotes() {
@@ -118,15 +108,4 @@ function _createNotes() {
         ]
         utilService.saveToStorage(NOTE_KEY, notes)
     }
-}
-
-function _setNextPrevNoteId(note) {
-    return storageService.query(NOTE_KEY).then((notes) => {
-        const noteIdx = notes.findIndex((currNote) => currNote.id === note.id)
-        const nextNote = notes[noteIdx + 1] ? notes[noteIdx + 1] : notes[0]
-        const prevNote = notes[noteIdx - 1] ? notes[noteIdx - 1] : notes[notes.length - 1]
-        note.nextNoteId = nextNote.id
-        note.prevNoteId = prevNote.id
-        return note
-    })
 }

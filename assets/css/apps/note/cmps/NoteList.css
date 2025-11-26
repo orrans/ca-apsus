@@ -1,1 +1,6 @@
- /* note list */
+/* note list */
+.note-list {
+    column-count: 6;
+    list-style: none;
+    padding: 0;
+}

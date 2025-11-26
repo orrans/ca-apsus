@@ -1,5 +1,6 @@
 import { noteService } from '../services/note.service.js'
 import { NoteList } from '../cmps/NoteList.jsx'
+import { CreateNoteForm } from '../cmps/CreateNoteForm.jsx'
 
 const { useState, useEffect } = React
 
@@ -7,8 +8,16 @@ export function NoteIndex() {
     const [notes, setNotes] = useState(null)
 
     useEffect(() => {
-        noteService.query().then((notes) => setNotes(notes))
+        loadNotes()
     }, [])
+
+    function loadNotes() {
+        noteService.query().then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
+    }
+
+    function onCreateNote(note) {
+        noteService.save(note).then((createdNote) => setNotes([createdNote, ...notes]))
+    }
 
     function onRemoveNote(noteId) {
         noteService
@@ -26,6 +35,7 @@ export function NoteIndex() {
 
     return (
         <section className="note-index">
+            <CreateNoteForm onCreate={onCreateNote} />
             <NoteList notes={notes} onRemove={onRemoveNote} />
         </section>
     )
