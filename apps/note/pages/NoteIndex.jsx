@@ -34,6 +34,20 @@ export function NoteIndex() {
         noteService.save(note).then(() => setNotes(updatedNotes))
     }
 
+    function onDuplicateNote(note) {
+        const noteToSave = { ...note }
+        delete noteToSave.id
+        noteToSave.createdAt = Date.now()
+        noteService
+            .save(noteToSave)
+            .then((savedNote) => {
+                setNotes((prevNotes) => [savedNote, ...prevNotes])
+            })
+            .catch((err) => {
+                console.log('Cannot duplicate note', err)
+            })
+    }
+
     function onRemoveNote(noteId) {
         noteService
             .remove(noteId)
@@ -56,6 +70,7 @@ export function NoteIndex() {
                 onRemove={onRemoveNote}
                 onUpdateTodo={updateTodo}
                 onUpdateNote={onUpdateNote}
+                onDuplicate={onDuplicateNote}
             />
         </section>
     )

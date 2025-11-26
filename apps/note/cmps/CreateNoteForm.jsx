@@ -92,7 +92,7 @@ export function CreateNoteForm({ onCreate }) {
                             <button
                                 className="delete-img"
                                 onClick={() => setNote(noteService.getEmptyNote())}>
-                                <i className="fa-solid fa-trash-can"></i>
+                                <span className="material-symbols-outlined">delete</span>
                             </button>
                         </div>
                         <div>

@@ -2,7 +2,7 @@ import { NoteTxt } from './NoteTxt.jsx'
 import { NoteImg } from './NoteImg.jsx'
 import { NoteTodos } from './NoteTodos.jsx'
 
-export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote }) {
+export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
     return (
         <article className="note-preview" style={note.style}>
             <div
@@ -21,7 +21,7 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote }) {
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
             <section className="actions">
                 <button onClick={() => onRemove(note.id)}>
-                    <i className="fa-solid fa-trash-can"></i>
+                    <span className="material-symbols-outlined">delete</span>
                 </button>
                 <input
                     type="color"
@@ -30,6 +30,9 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote }) {
                         onUpdateNote({ ...note, style: { backgroundColor: event.target.value } })
                     }
                 />
+                <button onClick={() => onDuplicate(note)}>
+                    <span className="material-symbols-outlined">file_copy</span>
+                </button>
             </section>
         </article>
     )

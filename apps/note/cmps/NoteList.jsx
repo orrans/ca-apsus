@@ -1,6 +1,6 @@
 import { NotePreview } from './NotePreview.jsx'
 
-export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote }) {
+export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
     return (
         <div>
             <h2>Pinned</h2>
@@ -14,6 +14,7 @@ export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote }) {
                                 onRemove={onRemove}
                                 onUpdateTodo={onUpdateTodo}
                                 onUpdateNote={onUpdateNote}
+                                onDuplicate={onDuplicate}
                             />
                         </li>
                     ))}
@@ -30,6 +31,7 @@ export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote }) {
                                 onRemove={onRemove}
                                 onUpdateTodo={onUpdateTodo}
                                 onUpdateNote={onUpdateNote}
+                                onDuplicate={onDuplicate}
                             />
                         </li>
                     ))}

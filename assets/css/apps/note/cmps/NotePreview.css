@@ -24,3 +24,39 @@
         }
     }
 }
+
+.actions {
+    display: flex;
+    gap: 8px;
+
+    & button,
+    & input[type='color'] {
+        background: none;
+        border: none;
+        height: 32px;
+        width: 32px;
+        cursor: pointer;
+        &,
+        & .material-symbols-outlined {
+            font-size: 20px;
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 10%);
+        }
+        border-radius: 50%;
+    }
+
+    & input[type='color'] {
+        width: 32px;
+        height: 32px;
+        background-color: whitesmoke;
+
+        &,
+        &::-webkit-color-swatch,
+        &::-webkit-color-swatch-wrapper {
+            border-radius: 50%;
+            padding: 2px;
+        }
+    }
+}
