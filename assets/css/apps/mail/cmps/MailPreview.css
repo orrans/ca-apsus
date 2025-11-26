@@ -1,0 +1,65 @@
+.email-list-item {
+    box-sizing: border-box;
+    display: flex;
+    font-size: 0.875rem;
+    align-items: center;
+    max-height: 50px;
+    padding: 5px;
+    gap: 10px;
+    width: 100%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    color: rgb(32, 33, 36);
+    font-weight: bold;
+
+    &:hover {
+        cursor: pointer;
+        background-color: var(--hover-bg-color);
+        border-right: 1px solid rgba(106, 106, 106, 0.425);
+        border-left: 1px solid rgba(106, 106, 106, 0.425);
+        box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+        z-index: 2;
+    }
+}
+
+.email-list-item.read {
+    font-weight: normal;
+    &:hover {
+        box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    }
+    
+    z-index: 2;
+}
+
+/* .email-list-item:first-child {
+    border-top: 1px solid rgba(106, 106, 106, 0.425);
+} */
+
+.email-list-item button {
+    width: 20px;
+    height: 15px;
+    border-radius: 4px;
+    margin: 5px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: flex-end;
+}
+
+.email-list-item button>img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.preview-date {
+    justify-self: flex-end;
+}
