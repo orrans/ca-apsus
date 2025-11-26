@@ -9,7 +9,9 @@ export function NotePreview({ note, onRemove, onUpdateTodo }) {
             {note.type === 'NoteImg' && <NoteImg info={note.info} />}
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
             <section className="actions">
-                <button onClick={() => onRemove(note.id)}>&times;</button>
+                <button onClick={() => onRemove(note.id)}>
+                    <i className="fa-solid fa-trash-can"></i>
+                </button>
             </section>
         </article>
     )

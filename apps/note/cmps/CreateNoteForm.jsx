@@ -1,3 +1,4 @@
+import { utilService } from '../../../services/util.service.js'
 import { noteService } from '../services/note.service.js'
 
 const { useState, useEffect, useRef } = React
@@ -30,6 +31,18 @@ export function CreateNoteForm({ onCreate }) {
         const todos = [...note.info.todos]
         todos[idx] = todo
         setNote({ ...note, info: { todos } })
+    }
+
+    function uploadFile() {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.onchange = (event) => {
+            const file = event.target.files[0]
+            utilService.fileToBase64(file).then((file) => {
+                setNote({ ...note, type: 'NoteImg', info: { url: file } })
+            })
+        }
+        input.click()
     }
 
     return (
@@ -72,19 +85,62 @@ export function CreateNoteForm({ onCreate }) {
                         </div>
                     </div>
                 )}
-                <button
-                    onClick={() => {
-                        setNote({
-                            ...note,
-                            type: 'NoteTodos',
-                            info: { todos: [{ txt: '', isDone: false }] },
-                        })
-                    }}>
-                    <i className="fa-regular fa-square-check"></i>
-                </button>
-                <button>
-                    <i className="fa-regular fa-image"></i>
-                </button>
+                {note.type === 'NoteImg' && (
+                    <div className="img-container">
+                        <div className="img-inner-container">
+                            <img className="uploaded-img" src={note.info.url} />
+                            <button
+                                className="delete-img"
+                                onClick={() => setNote(noteService.getEmptyNote())}>
+                                <i className="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                value={note.info.title}
+                                placeholder="Add title"
+                                onInput={(event) =>
+                                    setNote({
+                                        ...note,
+                                        info: { ...note.info, title: event.target.value },
+                                    })
+                                }
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                value={note.info.txt}
+                                placeholder="Take a note..."
+                                onInput={(event) =>
+                                    setNote({
+                                        ...note,
+                                        info: { ...note.info, txt: event.target.value },
+                                    })
+                                }
+                            />
+                        </div>
+                    </div>
+                )}
+                {note.type !== 'NoteImg' && (
+                    <React.Fragment>
+                        <button
+                            onClick={() => {
+                                setNote({
+                                    ...note,
+                                    type: 'NoteTodos',
+                                    info: { todos: [{ txt: '', isDone: false }] },
+                                })
+                            }}>
+                            <i className="fa-regular fa-square-check"></i>
+                        </button>
+
+                        <button onClick={uploadFile}>
+                            <i className="fa-regular fa-image"></i>
+                        </button>
+                    </React.Fragment>
+                )}
             </div>
         </div>
     )

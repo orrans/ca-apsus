@@ -9,7 +9,8 @@ export const utilService = {
     loadFromStorage,
     saveToStorage,
     isToday,
-    getTimeString
+    getTimeString,
+    fileToBase64,
 }
 
 export function saveToStorage(key, val) {
@@ -33,7 +34,40 @@ export function makeId(length = 6) {
 }
 
 export function makeLorem(size = 100) {
-    var words = ['The sky', 'above', 'the port', 'was', 'the color of television', 'tuned', 'to', 'a dead channel', '.', 'All', 'this happened', 'more or less', '.', 'I', 'had', 'the story', 'bit by bit', 'from various people', 'and', 'as generally', 'happens', 'in such cases', 'each time', 'it', 'was', 'a different story', '.', 'It', 'was', 'a pleasure', 'to', 'burn']
+    var words = [
+        'The sky',
+        'above',
+        'the port',
+        'was',
+        'the color of television',
+        'tuned',
+        'to',
+        'a dead channel',
+        '.',
+        'All',
+        'this happened',
+        'more or less',
+        '.',
+        'I',
+        'had',
+        'the story',
+        'bit by bit',
+        'from various people',
+        'and',
+        'as generally',
+        'happens',
+        'in such cases',
+        'each time',
+        'it',
+        'was',
+        'a different story',
+        '.',
+        'It',
+        'was',
+        'a pleasure',
+        'to',
+        'burn',
+    ]
     var txt = ''
     while (size > 0) {
         size--
@@ -45,11 +79,11 @@ export function makeLorem(size = 100) {
 export function getRandomIntInclusive(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive 
+    return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive
 }
 
 export function padNum(num) {
-    return (num > 9) ? num + '' : '0' + num
+    return num > 9 ? num + '' : '0' + num
 }
 
 export function getRandomColor() {
@@ -66,29 +100,41 @@ export function getDayName(date, locale) {
     return date.toLocaleDateString(locale, { weekday: 'long' })
 }
 
-
 export function getMonthName(date) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
     ]
     return monthNames[date.getMonth()]
 }
 
 export function isToday(date) {
-    const today = new Date();
-    const checkDate = new Date(date);
-    return checkDate.getDate() === today.getDate() &&
+    const today = new Date()
+    const checkDate = new Date(date)
+    return (
+        checkDate.getDate() === today.getDate() &&
         checkDate.getMonth() === today.getMonth() &&
-        checkDate.getFullYear() === today.getFullYear();
+        checkDate.getFullYear() === today.getFullYear()
+    )
 }
 
 export function getTimeString(date) {
-    const d = new Date(date);
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const seconds = String(d.getSeconds()).padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
-}   
+    const d = new Date(date)
+    const hours = String(d.getHours()).padStart(2, '0')
+    const minutes = String(d.getMinutes()).padStart(2, '0')
+    const seconds = String(d.getSeconds()).padStart(2, '0')
+    return `${hours}:${minutes}:${seconds}`
+}
 
 export function debounce(func, delay) {
     let timeoutId
@@ -116,4 +162,22 @@ export function getData(url, cb) {
 
     xhr.open('GET', url, true)
     xhr.send()
+}
+
+export function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+
+        reader.onload = () => {
+            // The result will be a data URL (e.g., "data:image/png;base64,iVBORw0...")
+            // You might want to extract just the base64 part after the comma.
+            resolve(reader.result)
+        }
+
+        reader.onerror = (error) => {
+            reject(error)
+        }
+
+        reader.readAsDataURL(file)
+    })
 }

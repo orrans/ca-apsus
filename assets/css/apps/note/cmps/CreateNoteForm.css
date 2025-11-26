@@ -32,4 +32,24 @@
             border-radius: 50%;
         }
     }
+    & .uploaded-img {
+        width: 100%;
+    }
+
+    & .img-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    & .img-inner-container {
+        flex: 1;
+        position: relative;
+
+        & .delete-img {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+    }
 }
