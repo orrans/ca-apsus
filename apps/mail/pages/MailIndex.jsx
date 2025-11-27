@@ -2,64 +2,83 @@ import { emailService } from '../services/mail.service.js'
 import { EmailList } from '../cmps/MailList.jsx'
 import { ComposeEmail } from '../cmps/MailCompose.jsx'
 import { showSuccessMsg, showErrorMsg, eventBusService } from '../../../services/event-bus.service.js'
+import { MailFilter } from '../cmps/MailFilter.jsx'
+import { MailFolderList } from '../cmps/MailFolderList.jsx'
 
 const { useState, useEffect } = React
-const { useNavigate, useSearchParams, Outlet } = ReactRouterDOM
+const { useNavigate, useSearchParams, useParams, Outlet } = ReactRouterDOM
 
 export function MailIndex() {
     const [emails, setEmails] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [isComposeOpen, setIsComposeOpen] = useState(false)
-    const navigate = useNavigate()
-    const [searchParams, setSearchParams] = useSearchParams()
     const [unreadCount, setUnreadCount] = useState(0)
-    const [selectedMailId, setSelectedMailId] = useState(null)
-
+    
+    const [searchParams, setSearchParams] = useSearchParams()
+    const navigate = useNavigate()
+    const params = useParams()
+    // Get folder from params - could be in folder param or emailId param (if it's a folder name)
+    const folderFromUrl = params.folder || params.emailId
+    const currentFolder = folderFromUrl || 'inbox'
+    const validFolders = ['inbox', 'sent', 'trash', 'draft', 'starred', 'important', 'archive']
+    // Determine if an email is selected: emailId exists and is not a folder name
+    const selectedMailId = params.emailId && !validFolders.includes(params.emailId) ? params.emailId : null
+    const [filterBy, setFilterBy] = useState(() => {
+        const defaultFilter = emailService.getDefaultFilter(searchParams)
+        return { ...defaultFilter, folder: currentFolder }
+    })
+    
+    // Redirect /mail to /mail/inbox if no folder in URL
     useEffect(() => {
-        loadEmails()
-    }, [])
-
-    useEffect(() => {
-        // Listen for email selection (on load and on back)
-        const unsubscribeSelected = eventBusService.on('email-selected', (emailId) => {
-            setSelectedMailId(emailId)
-        })
-        const unsubscribeDeselected = eventBusService.on('email-deselected', () => {
-            setSelectedMailId(null)
-        })
-        return () => {
-            unsubscribeSelected()
-            unsubscribeDeselected()
+        if (!params.folder && !params.emailId) {
+            navigate('/mail/inbox', { replace: true })
         }
-    }, [])
+    }, [params.folder, params.emailId, navigate])
 
     useEffect(() => {
+        emailService.countUnreadEmails().then(count => setUnreadCount(count))
+        loadEmails()
+    }, [filterBy])
+
+    // Sync filterBy when URL params change (folder or searchParams)
+    useEffect(() => {
+        const txtFromParams = searchParams.get('txt') || ''
+        const newFolder = folderFromUrl || 'inbox'
+        setFilterBy(prevFilter => {
+            const hasChanged = prevFilter.txt !== txtFromParams || prevFilter.folder !== newFolder
+            if (hasChanged) {
+                return { txt: txtFromParams, folder: newFolder }
+            }
+            return prevFilter
+        })
+    }, [searchParams, folderFromUrl])
+
+    // Reload emails when navigating back from email details (when emailId becomes null)
+    const prevEmailIdRef = React.useRef(params.emailId)
+    useEffect(() => {
+        // Only reload if we navigated back (emailId went from a value to null/undefined)
+        const hadEmailId = prevEmailIdRef.current && !validFolders.includes(prevEmailIdRef.current)
+        const hasEmailId = params.emailId && !validFolders.includes(params.emailId)
+        
+        if (hadEmailId && !hasEmailId) {
+            loadEmails()
+        }
+        prevEmailIdRef.current = params.emailId
+    }, [params.emailId])
+
+    useEffect(() => {   //update unread count when emails change
         if (!emails) return
-        const count = emails.filter(email => !email.isRead).length
-        setUnreadCount(count)
+        emailService.countUnreadEmails().then(count => setUnreadCount(count))   
     }, [emails])
 
-    // useEffect(() => {
-    //     // Mark email as read when selected
-    //     if (!selectedMailId || !emails) return
-    //     emailService.readEmail(selectedMailId).then(() => {
-    //         setEmails(prevEmails =>
-    //             prevEmails.map(prevEmail =>
-    //                 prevEmail.id === selectedMailId ? { ...prevEmail, isRead: true } : prevEmail
-    //             )
-    //         )
-    //     })
-    //         .catch(err => {
-    //             console.log('err:', err)
-    //             showErrorMsg(`Failed to read email(${selectedMailId})`)
-    //         })
-    // }, [selectedMailId, emails])
 
-
+    function onUpdateUnreadCount() {
+        emailService.countUnreadEmails().then(count => setUnreadCount(count))
+    }
 
     function loadEmails() {
         setIsLoading(true)
-        emailService.query()
+        emailService.query(filterBy)
             .then(emails => setEmails(emails))
             .catch(err => {
                 console.log('err:', err)
@@ -68,11 +87,22 @@ export function MailIndex() {
             .finally(() => setIsLoading(false))
     }
 
+    function onSetFilter(newFilterBy) {
+        setFilterBy(filterBy => ({ ...filterBy, ...newFilterBy }))
+        // Update searchParams when filter is submitted
+        const newSearchParams = new URLSearchParams()
+        if (newFilterBy.txt) {
+            newSearchParams.set('txt', newFilterBy.txt)
+        }
+        setSearchParams(newSearchParams)
+    }
+
     function onRemoveEmail(emailId) {
         emailService.remove(emailId)
             .then(() => {
                 setEmails(emails => (
                     emails.filter(email => email.id !== emailId)))
+                onUpdateUnreadCount()
                 showSuccessMsg(`Email removed successfully(${emailId})`)
             })
             .catch(err => {
@@ -82,15 +112,15 @@ export function MailIndex() {
     }
 
     function onBack() {
-        setSelectedMailId(null)
-        navigate('/mail')
+        navigate(`/mail/${currentFolder}`)
     }
 
     function onReadEmail(emailId) {
-        setSelectedMailId(emailId)
         emailService.readEmail(emailId)
             .then(() => {
-                navigate(`/mail/${emailId}`)
+                emailService.countUnreadEmails().then(count => setUnreadCount(count))
+                // Navigate with current folder to maintain context
+                navigate(`/mail/${currentFolder}/${emailId}`)
             })
             .catch(err => {
                 console.log('err:', err)
@@ -98,34 +128,152 @@ export function MailIndex() {
             })
     }
 
+    function onArchiveEmail(emailId) {
+        emailService.get(emailId)
+            .then(email => {
+                email.folder = 'archive'
+                return emailService.save(email)
+            })
+            .then(() => {
+                setEmails(emails => emails.filter(email => email.id !== emailId))
+                onUpdateUnreadCount()
+                showSuccessMsg('Email archived')
+            })
+            .catch(err => {
+                console.log('err:', err)
+                showErrorMsg('Failed to archive email')
+            })
+    }
+
+    function onStarEmail(emailId) {
+        // Optimistically update UI immediately
+        setEmails(emails => emails.map(email => 
+            email.id === emailId ? { ...email, isStarred: !email.isStarred } : email
+        ))
+        // Then save to database
+        emailService.get(emailId)
+            .then(email => {
+                email.isStarred = !email.isStarred
+                return emailService.save(email)
+            })
+    }
+
+    function onImportantEmail(emailId) {
+        // Optimistically update UI immediately
+        setEmails(emails => emails.map(email => 
+            email.id === emailId ? { ...email, isImportant: !email.isImportant } : email
+        ))
+        // Then save to database
+        emailService.get(emailId)
+            .then(email => {
+                email.isImportant = !email.isImportant
+                return emailService.save(email)
+            })
+    }
+
+    function onToggleReadStatus(emailId) {
+        emailService.get(emailId)
+            .then(email => {
+                email.isRead = !email.isRead
+                return emailService.save(email)
+            })
+            .then(() => {
+                setEmails(emails => emails.map(email => 
+                    email.id === emailId ? { ...email, isRead: !email.isRead } : email
+                ))
+                onUpdateUnreadCount()
+                showSuccessMsg('Email status updated')
+            })
+            .catch(err => {
+                console.log('err:', err)
+                showErrorMsg('Failed to update email status')
+            })
+    }
+
+    function onSnoozeEmail(emailId) {
+        // For now, just show a message. Can be enhanced later with actual snooze functionality
+        showSuccessMsg('Email snoozed')
+    }
+
     if (isLoading || !emails) return <div>Loading...</div>
 
     return (
         <section className="mail-index">
-            <button
-                className="toggle-compose-btn"
-                type="button"
-                onClick={() => setIsComposeOpen(prev => !prev)}
-            >
-                {isComposeOpen ? 'Close compose' : 'Compose'}
-            </button>
+            <div className="mail-filter-container">
+                <MailFilter 
+                    defaultFilter={filterBy} 
+                    onSetFilter={onSetFilter} 
+                />
+            </div>
+            
+            <div className="mail-layout">
+                <div className="mail-sidebar">
+                    <button
+                        title="Compose"
+                        className="compose-btn"
+                        type="button"
+                        onClick={() => setIsComposeOpen(prev => !prev)}
+                    >
+                        <img src="../../../assets/img/mail-imgs/edit-pen.svg" alt="compose" />
+                        {isComposeOpen ? 'Close compose' : 'Compose'}
+                    </button>
+                    <MailFolderList />
+                </div>
+                
+                <div className="mail-content">
+                    {!selectedMailId && (
+                        <EmailList
+                            emails={emails}
+                            onRemoveEmail={onRemoveEmail}
+                            onReadEmail={onReadEmail}
+                            onArchiveEmail={onArchiveEmail}
+                            onToggleReadStatus={onToggleReadStatus}
+                            onSnoozeEmail={onSnoozeEmail}
+                            // onSelectEmail={onSelectEmail}
+                            onStarEmail={onStarEmail}
+                            onImportantEmail={onImportantEmail}
+                        />
+                    )}
+                    <Outlet context={{ onUpdateUnreadCount }} />
+                </div>
+            </div>
 
             {isComposeOpen && (
-                <ComposeEmail
-                    onEmailAdded={(savedEmail) =>
-                        setEmails(emails => [savedEmail, ...emails])
-                    }
-                />
+                <div className="modal-overlay" onClick={() => setIsComposeOpen(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <h4>New Message</h4>
+                        <button 
+                            className="modal-close-btn" 
+                            onClick={() => setIsComposeOpen(false)}
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+                        <ComposeEmail
+                            onEmailAdded={(savedEmail) =>{
+                                setEmails(emails => [savedEmail, ...emails])
+                                onUpdateUnreadCount()
+                                setIsComposeOpen(false)
+                            }}
+                            onDraftSave={(draftData) => {
+                                emailService.saveDraft(draftData)
+                                    .then(savedDraft => {
+                                        if (savedDraft) {
+                                            // Only update emails list if we're currently viewing drafts folder
+                                            if (currentFolder === 'draft') {
+                                                setEmails(emails => [savedDraft, ...emails])
+                                            }
+                                            onUpdateUnreadCount
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.log('err:', err)
+                                    })
+                            }}
+                        />
+                    </div>
+                </div>
             )}
-            <div className="unread-count">{`${unreadCount} unread emails`}</div>
-            {!selectedMailId && (
-                <EmailList
-                    emails={emails}
-                    onRemoveEmail={onRemoveEmail}
-                    onReadEmail={onReadEmail}
-                />
-            )}
-            <Outlet />
         </section>
     )
 }

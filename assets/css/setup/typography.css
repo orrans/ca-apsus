@@ -1,0 +1,7 @@
+/* Fonts */
+
+/* ProductSans-Thin */
+@font-face {
+    font-family: "ProductSans-Thin";
+    src: url("../../assets/fonts/ProductSans-Thin.ttf");
+}

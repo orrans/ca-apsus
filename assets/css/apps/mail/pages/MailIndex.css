@@ -1,1 +1,65 @@
  /* mail index  */
+ .mail-index{
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 16px;
+}
+
+.mail-filter-container {
+    width: 100%;
+    grid-column: 1 / -1;
+}
+
+.mail-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+.mail-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.compose-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 24px;
+    background-color: #c2e7ff;
+    border: none;
+    border-radius: 24px;
+    font-size: 0.875rem;
+    font-family: ProductSans-Thin;
+    font-weight: 500;
+    color: #001d35;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    &:hover {
+        background-color: #a8d8f0;
+        box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+    }
+    & img{
+        width: 24px;
+        height: 24px;
+        margin-right: 16px;
+    }
+}
+
+
+.mail-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}

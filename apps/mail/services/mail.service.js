@@ -18,15 +18,34 @@ export const emailService = {
     countUnreadEmails,
     sendEmail,
     readEmail,
-    setEmailToRead,
+    getFolderCount,
+    getEmailCounts,
+    moveToTrash,
+    saveDraft,
 }
 
 function query(filterBy = {}) {
+    const { txt = '', folder } = filterBy
     return storageService.query(EMAIL_KEY)
         .then(emails => {
-            if (filterBy.txt) {
-                const regExp = new RegExp(filterBy.txt, 'i')
-                emails = emails.filter(email => regExp.test(email.subject))
+            if (folder) {
+                // Handle special folders: starred and important
+                if (folder === 'starred') {
+                    emails = emails.filter(email => email.isStarred === true)
+                } else if (folder === 'important') {
+                    emails = emails.filter(email => email.isImportant === true)
+                } else {
+                    // Regular folder filtering
+                    emails = emails.filter(email => email.folder === folder)
+                }
+            }
+            if (txt) {
+                const regExp = new RegExp(txt, 'i')
+                emails = emails.filter(email =>
+                    regExp.test(email.subject) ||
+                    regExp.test(email.from) ||
+                    regExp.test(email.body)
+                )
             }
             // if (filterBy.listPrice) {
             //     emails = emails.filter(email => email.listPrice.amount >= filterBy.listPrice)
@@ -51,13 +70,18 @@ function get(emailId) {
 }
 
 function remove(emailId) {
-    // return Promise.reject('Oh No!')
-    return storageService.remove(EMAIL_KEY, emailId)
-        .then(() => {
-            gUsedEmailIds.delete(emailId)
-            return emailId
-        })
+    return get(emailId).then(email => {
+        if (email.folder !== 'trash') {
+            return moveToTrash(email)
+        }
+        return storageService.remove(EMAIL_KEY, emailId)
+            .then(() => {
+                gUsedEmailIds.delete(emailId)
+                return emailId
+            })
+    })
 }
+
 
 function save(email) {
     if (email.id) {
@@ -81,28 +105,34 @@ function getEmptyEmail(subject, sentFrom = '', trueFalse = false) {
         sentAt: null,
         language: '',
         removedAt: null,
-        to: ''
+        to: '',
+        folder: '',
+        isStarred: false,
+        isImportant: false,
     }
 }
 
-function getDefaultFilter() {
-    return { txt: '' }
+function moveToTrash(email) {
+    email.folder = 'trash'
+    email.removedAt = Date.now()
+    return save(email)
+
 }
 
-// function getAllCategories() {    maybe add later with primary,social,updates,promotions
-//     return storageService.query(EMAIL_KEY)
-//         .then(books => {
-//             const categoriesSet = new Set()
-//             books.forEach(book => {
-//                 if (book.categories && book.categories.length > 0) {
-//                     book.categories.forEach(category => {
-//                         categoriesSet.add(category)
-//                     })
-//                 }
-//             })
-//             return Array.from(categoriesSet).sort()
-//         })
-// }
+function getDefaultFilter(searchParams) {
+    if (!searchParams) {
+        return { txt: '' }
+    }
+    // handle params object
+    if (typeof searchParams.get === 'function') {
+        return {
+            txt: searchParams.get('txt') || ''
+        }
+    }
+    return {
+        txt: searchParams.txt || ''
+    }
+}
 
 function _initUsedEmailIds() {   //used to initialize the globalused book ids var
     const emails = loadFromStorage(EMAIL_KEY)
@@ -157,7 +187,23 @@ function sendEmail(email) {
     email.isRead = false
     email.sentAt = Date.now()
     email.from = loggedinUser.email
+    email.folder = 'sent'
     return save(email)
+}
+
+function saveDraft(emailData) {
+    const { to, subject, body } = emailData
+    // Only save if there's content in at least one field
+    if (!to && !subject && !body) {
+        return Promise.resolve(null)
+    }
+    
+    const draftEmail = emailService.getEmptyEmail(subject || '(no subject)', loggedinUser.email, true)
+    draftEmail.to = to || null
+    draftEmail.body = body || null
+    draftEmail.folder = 'draft'
+    draftEmail.sentAt = null // Drafts don't have a sentAt
+    return save(draftEmail)
 }
 
 function countUnreadEmails() {
@@ -176,6 +222,22 @@ function _createEmail({ subject, from, sentDate = null, language = '', to = logg
     email.language = language ? language : 'en'
     email.subject = makeLorem(getRandomIntInclusive(2, 15))
     email.sentAt = sentDate ? sentDate : Date.now() - getRandomIntInclusive(0, 10000000000)
+    return setFolderEmail(email)
+}
+
+function setFolderEmail(email) {
+    if (email.removedAt) {
+        email.folder = 'trash'
+    }
+    else if (!email.createdAt) {
+        email.folder = 'draft'
+    }
+    if (email.from === loggedinUser.email) {
+        email.folder = 'sent'
+    }
+    else {
+        email.folder = 'inbox'
+    }
     return email
 }
 
@@ -191,17 +253,27 @@ function _setNextPrevEmailId(email) {
 }
 
 function readEmail(emailId) {
-    return query().then(emails => {
-        const email = emails.find(email => email.id === emailId)
+    return get(emailId).then(email => {
         email.isRead = true
         return save(email)
     })
 }
 
-function setEmailToRead(emailId) {
+
+function getFolderCount(folder) {
+    return query({ folder }).then(emails => emails.length)
+}
+
+function getEmailCounts() {
     return query().then(emails => {
-        const email = emails.find(email => email.id === emailId)
-        email.isRead = true
-        return save(email)
+        return {
+            inbox: emails.filter(email => email.folder === 'inbox').length,
+            sent: emails.filter(email => email.folder === 'sent').length,
+            trash: emails.filter(email => email.folder === 'trash').length,
+            draft: emails.filter(email => email.folder === 'draft').length,
+            starred: emails.filter(email => email.isStarred === true).length,
+            important: emails.filter(email => email.isImportant === true).length,
+            archive: emails.filter(email => email.folder === 'archive').length,
+        }
     })
 }

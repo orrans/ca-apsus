@@ -1,10 +1,31 @@
 import { emailService } from '../services/mail.service.js'
 import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
-
+import { eventBusService } from '../../../services/event-bus.service.js'
+import '../../../../assets/css/apps/mail/cmps/MailCompose.css'
 const { useState } = React
 
-export function ComposeEmail({ onEmailAdded }) {
+export function ComposeEmail({ onEmailAdded, onClose, onDraftSave }) {
     const [newEmail, setNewEmail] = useState({ to: '', subject: '', body: '' })
+    const emailRef = React.useRef(newEmail)
+    const wasSentRef = React.useRef(false)
+
+    // Keep ref in sync with state
+    React.useEffect(() => {
+        emailRef.current = newEmail
+    }, [newEmail])
+
+    // Save draft when component unmounts (modal closes) if there's content and email wasn't sent
+    React.useEffect(() => {
+        return () => {
+            if (!wasSentRef.current) {
+                const { to, subject, body } = emailRef.current
+                if ((to || subject || body) && onDraftSave) {
+                    onDraftSave(emailRef.current)
+                    showSuccessMsg('Draft saved')
+                }
+            }
+        }
+    }, [onDraftSave])
 
     function onComposeChange(ev) {
         const { name, value } = ev.target
@@ -21,14 +42,17 @@ export function ComposeEmail({ onEmailAdded }) {
         emailToSave.body = body
         emailToSave.sentAt = Date.now()
 
+        wasSentRef.current = true
         emailService.sendEmail(emailToSave)
             .then(savedEmail => {
                 setNewEmail({ to: '', subject: '', body: '' })
                 showSuccessMsg('Email sent')
+                eventBusService.emit('email-counts-changed')
                 if (onEmailAdded) onEmailAdded(savedEmail)
             })
             .catch(err => {
                 console.log('err:', err)
+                wasSentRef.current = false // Reset flag if sending failed
                 showErrorMsg('Failed to add email')
             })
     }
@@ -55,7 +79,7 @@ export function ComposeEmail({ onEmailAdded }) {
                 value={newEmail.body}
                 onChange={onComposeChange}
             />
-            <button type="submit">Add Email</button>
+            <button type="submit">Send</button>
         </form>
     )
 }
