@@ -2,12 +2,15 @@ import { noteService } from '../services/note.service.js'
 import { NoteList } from '../cmps/NoteList.jsx'
 import { CreateNoteForm } from '../cmps/CreateNoteForm.jsx'
 import { eventBusService } from '../../../services/event-bus.service.js'
+import { NoteFilterType } from '../cmps/NoteFilterType.jsx'
 
 const { useState, useEffect } = React
 
 export function NoteIndex() {
-    const [notes, setNotes] = useState(null)
+    const [notes, setNotes] = useState([])
     const [search, setSearch] = useState('')
+    const [filterType, setFilterType] = useState(null)
+    const [searchActive, setSearchActive] = useState(false)
 
     useEffect(() => {
         loadNotes()
@@ -18,9 +21,26 @@ export function NoteIndex() {
             setSearch(value)
             searchNotes(value)
         }
-        const removeSubscribe = eventBusService.on('noteSearch', handleSearch)
-        return removeSubscribe
+        function handleSearchActive(value) {
+            setSearchActive(value)
+            if (value) setNotes([])
+            else setFilterType(null)
+        }
+        const removeSubscribeSearch = eventBusService.on('noteSearch', handleSearch)
+        const removeSubscribeSearchActive = eventBusService.on(
+            'noteSearchActive',
+            handleSearchActive
+        )
+
+        return () => {
+            removeSubscribeSearch()
+            removeSubscribeSearchActive()
+        }
     }, [])
+
+    useEffect(() => {
+        searchNotes(search)
+    }, [filterType])
 
     function loadNotes() {
         noteService
@@ -32,7 +52,7 @@ export function NoteIndex() {
     function searchNotes(search) {
         noteService
             //move only the sort to service
-            .query({ txt: search })
+            .query({ txt: search, type: filterType })
             .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
     }
 
@@ -80,16 +100,21 @@ export function NoteIndex() {
             })
     }
 
-    if (search)
+    if (searchActive)
         return (
             <div>
-                <NoteList
-                    notes={notes}
-                    onRemove={onRemoveNote}
-                    onUpdateTodo={updateTodo}
-                    onUpdateNote={onUpdateNote}
-                    onDuplicate={onDuplicateNote}
-                />
+                {!search && !filterType && (
+                    <NoteFilterType onFilterChange={(type) => setFilterType(type)} />
+                )}
+                {(search || filterType) && (
+                    <NoteList
+                        notes={notes}
+                        onRemove={onRemoveNote}
+                        onUpdateTodo={updateTodo}
+                        onUpdateNote={onUpdateNote}
+                        onDuplicate={onDuplicateNote}
+                    />
+                )}
             </div>
         )
 

@@ -10,15 +10,33 @@ export function NoteSearchForm({}) {
         eventBusService.emit('noteSearch', value)
     }
 
+    function onSearchActiveChange(value) {
+        eventBusService.emit('noteSearchActive', value)
+        if (!value) {
+            updateSearch('')
+        }
+    }
+
     return (
         <div className="note-search-container">
+            <button className='round-btn'>
+                <span className="material-symbols-outlined">search</span>
+            </button>
             <input
                 className="note-search-bar"
                 type="text"
+                placeholder='Search'
                 value={search}
                 onInput={(event) => updateSearch(event.target.value)}
+                onFocus={() => onSearchActiveChange(true)}
             />
-            <button>&times;</button>
+            <div>
+                <button
+                    className="note-search-close-btn round-btn"
+                    onClick={() => onSearchActiveChange(false)}>
+                    <span className="material-symbols-outlined">close</span>
+                </button>
+            </div>
         </div>
     )
 }

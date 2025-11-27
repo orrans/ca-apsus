@@ -26,6 +26,10 @@ function query(filterBy = {}) {
                     (note.info.todos && note.info.todos.some((todo) => regExp.test(todo.txt)))
             )
         }
+        if (filterBy.type) {
+            notes = notes.filter((note) => note.type === filterBy.type)
+        }
+
         return notes
     })
 }

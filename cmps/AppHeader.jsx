@@ -8,11 +8,9 @@ export function AppHeader() {
             <Link to="/">
                 <h3>LOGO!</h3>
             </Link>
-            <div>
-                <Routes>
-                    <Route path="/note" element={<NoteSearchForm />} />
-                </Routes>
-            </div>
+            <Routes>
+                <Route path="/note" element={<NoteSearchForm />} />
+            </Routes>
             <nav>
                 <NavLink to="/">Home</NavLink>
                 <NavLink to="/about">About</NavLink>
