@@ -11,21 +11,30 @@ export function CreateNoteForm({ onCreate }) {
         function handleClickOutside(event) {
             const formContainer = formRef.current
             const clickedElement = event.target
-            // check that the click element is not inside the form container
-            if (formContainer && !formContainer.contains(clickedElement)) {
-                if (note.type === 'NoteTxt' && !note.info.txt) return
-                // check that at least one todo have text
-                if (note.type === 'NoteTodos' && !note.info.todos.some((todo) => todo.txt)) return
 
-                onCreate({ ...note, createdAt: Date.now() })
+            if (formContainer && formContainer.contains(clickedElement)) return
+
+            const isTxtEmpty = note.type === 'NoteTxt' && !note.info.txt && !note.info.title
+
+            const isTodosEmpty =
+                note.type === 'NoteTodos' &&
+                !note.info.title &&
+                !note.info.todos.some((todo) => todo.txt.trim().length > 0)
+
+            const isImgEmpty = note.type === 'NoteImg' && !note.info.url && !note.info.title
+
+            if (isTxtEmpty || isTodosEmpty || isImgEmpty) {
                 setNote(noteService.getEmptyNote())
+                return
             }
+
+            onCreate({ ...note, createdAt: Date.now() })
+            setNote(noteService.getEmptyNote())
         }
 
-        //the listener is on all the body
         document.addEventListener('mousedown', handleClickOutside)
         return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [note])
+    }, [note, onCreate])
 
     function updateTodo(idx, todo) {
         const todos = [...note.info.todos]
@@ -57,9 +66,9 @@ export function CreateNoteForm({ onCreate }) {
                     />
                 )}
                 {note.type === 'NoteTodos' && (
-                    <div>
+                    <div className="todos-list-container">
                         {note.info.todos.map((todo, idx) => (
-                            <div key={idx}>
+                            <div key={idx} className="todo-row">
                                 <input
                                     type="checkbox"
                                     checked={todo.isDone}
@@ -67,17 +76,32 @@ export function CreateNoteForm({ onCreate }) {
                                         updateTodo(idx, { ...todo, isDone: event.target.checked })
                                     }
                                 />
+
                                 <input
                                     className={todo.isDone ? 'checked' : ''}
                                     type="text"
                                     value={todo.txt}
+                                    placeholder="List item"
                                     onInput={(event) =>
                                         updateTodo(idx, { ...todo, txt: event.target.value })
                                     }
                                 />
+
+                                <button
+                                    className="btn-remove-todo"
+                                    onClick={() => {
+                                        const newTodos = note.info.todos.filter(
+                                            (todo, i) => i !== idx
+                                        )
+                                        setNote({ ...note, info: { todos: newTodos } })
+                                    }}>
+                                    ✕
+                                </button>
                             </div>
                         ))}
+
                         <div
+                            className="add-todo-btn"
                             onClick={() =>
                                 updateTodo(note.info.todos.length, { txt: '', isDone: false })
                             }>

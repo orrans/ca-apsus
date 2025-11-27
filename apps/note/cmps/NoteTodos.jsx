@@ -5,6 +5,7 @@ export function NoteTodos({ note, onUpdateTodo }) {
             <h4>{info.title}</h4>
             <ul>
                 {info.todos.map((todo, idx) => (
+                    //change idx to elemnt id
                     <li key={idx}>
                         <input
                             type="checkbox"

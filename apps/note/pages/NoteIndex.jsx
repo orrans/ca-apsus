@@ -13,6 +13,7 @@ export function NoteIndex() {
 
     function loadNotes() {
         noteService
+        //move only the sort to service
             .query()
             .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
     }
@@ -35,6 +36,7 @@ export function NoteIndex() {
     }
 
     function onDuplicateNote(note) {
+        // move to  service 40 -42
         const noteToSave = { ...note }
         delete noteToSave.id
         noteToSave.createdAt = Date.now()
