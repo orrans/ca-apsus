@@ -1,20 +1,38 @@
 import { noteService } from '../services/note.service.js'
 import { NoteList } from '../cmps/NoteList.jsx'
 import { CreateNoteForm } from '../cmps/CreateNoteForm.jsx'
+import { eventBusService } from '../../../services/event-bus.service.js'
 
 const { useState, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState(null)
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
         loadNotes()
     }, [])
 
+    useEffect(() => {
+        function handleSearch(value) {
+            setSearch(value)
+            searchNotes(value)
+        }
+        const removeSubscribe = eventBusService.on('noteSearch', handleSearch)
+        return removeSubscribe
+    }, [])
+
     function loadNotes() {
         noteService
-        //move only the sort to service
+            //move only the sort to service
             .query()
+            .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
+    }
+
+    function searchNotes(search) {
+        noteService
+            //move only the sort to service
+            .query({ txt: search })
             .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
     }
 
@@ -61,6 +79,19 @@ export function NoteIndex() {
                 console.log('Problems removing note:', err)
             })
     }
+
+    if (search)
+        return (
+            <div>
+                <NoteList
+                    notes={notes}
+                    onRemove={onRemoveNote}
+                    onUpdateTodo={updateTodo}
+                    onUpdateNote={onUpdateNote}
+                    onDuplicate={onDuplicateNote}
+                />
+            </div>
+        )
 
     if (!notes) return <div>Loading...</div>
 

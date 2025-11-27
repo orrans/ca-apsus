@@ -19,7 +19,12 @@ function query(filterBy = {}) {
     return storageService.query(NOTE_KEY).then((notes) => {
         if (filterBy.txt) {
             const regExp = new RegExp(filterBy.txt, 'i')
-            notes = notes.filter((note) => regExp.test(note.info.txt))
+            notes = notes.filter(
+                (note) =>
+                    regExp.test(note.info.txt) ||
+                    regExp.test(note.info.title) ||
+                    (note.info.todos && note.info.todos.some((todo) => regExp.test(todo.txt)))
+            )
         }
         return notes
     })
