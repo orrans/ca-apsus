@@ -1,7 +1,4 @@
 .create-form {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     box-sizing: content-box;
     background-color: white;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
@@ -9,39 +6,65 @@
     border: 1px solid rgb(224, 224, 224);
     border-radius: 10px;
     max-width: 554px;
-    height: 26px;
     margin: 0 auto;
     margin-top: 33px;
-    & input {
+
+    & .form-title {
+        font-size: 1.25rem;
+        line-height: 1.25;
+    }
+    & .form-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    & input[type='text'] {
         width: 100%;
         border: none;
+
         &:focus {
             outline: 0;
         }
     }
+
     & .input-row {
         display: flex;
+        flex-grow: 1;
         width: 100%;
         gap: 10px;
         align-items: center;
-        input {
-            flex: 1;
+        input[type='text'] {
+            flex-grow: 1;
             &.checked {
                 text-decoration: line-through;
             }
         }
-        button {
-            background: none;
-            border: none;
-            height: 40px;
-            width: 40px;
-            cursor: pointer;
-            &:hover {
-                background-color: rgba(0, 0, 0, 10%);
-            }
-            border-radius: 50%;
+    }
+
+    & .form-inputs {
+        flex-grow: 1;
+    }
+
+    & button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 24px;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 10%);
         }
     }
+
+    & .round-btn {
+        height: 40px;
+        width: 40px;
+        padding: 0;
+        border-radius: 50%;
+    }
+
     & .uploaded-img {
         width: 100%;
     }
@@ -61,5 +84,40 @@
             bottom: 0;
             right: 0;
         }
+    }
+
+    & .todo-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+
+        & input[type='text'] {
+            flex-grow: 1;
+        }
+
+        & .btn-remove-todo {
+            opacity: 0;
+        }
+
+        &:has(:focus) .btn-remove-todo,
+        &:hover .btn-remove-todo {
+            opacity: 1;
+        }
+
+        &:has(:focus) {
+            border-top-color: black;
+            border-bottom-color: black;
+        }
+    }
+
+    & .todos-list-container {
+        width: 100%;
+    }
+
+    & .close-btn-container {
+        display: flex;
+        justify-content: end;
     }
 }

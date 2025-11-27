@@ -6,6 +6,7 @@ const { useState, useEffect, useRef } = React
 export function CreateNoteForm({ onCreate }) {
     const [note, setNote] = useState(noteService.getEmptyNote())
     const formRef = useRef(null)
+    const [editMode, setEditMode] = useState(false)
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -24,12 +25,12 @@ export function CreateNoteForm({ onCreate }) {
             const isImgEmpty = note.type === 'NoteImg' && !note.info.url && !note.info.title
 
             if (isTxtEmpty || isTodosEmpty || isImgEmpty) {
-                setNote(noteService.getEmptyNote())
+                resetForm()
                 return
             }
 
             onCreate({ ...note, createdAt: Date.now() })
-            setNote(noteService.getEmptyNote())
+            resetForm()
         }
 
         document.addEventListener('mousedown', handleClickOutside)
@@ -40,6 +41,11 @@ export function CreateNoteForm({ onCreate }) {
         const todos = [...note.info.todos]
         todos[idx] = todo
         setNote({ ...note, info: { todos } })
+    }
+
+    function resetForm() {
+        setNote(noteService.getEmptyNote())
+        setEditMode(false)
     }
 
     function uploadFile() {
@@ -56,74 +62,14 @@ export function CreateNoteForm({ onCreate }) {
 
     return (
         <div className="create-form" ref={formRef}>
-            <div className="input-row">
-                {note.type === 'NoteTxt' && (
-                    <input
-                        type="text"
-                        value={note.info.txt}
-                        placeholder="Take a note..."
-                        onInput={(event) => setNote({ ...note, info: { txt: event.target.value } })}
-                    />
-                )}
-                {note.type === 'NoteTodos' && (
-                    <div className="todos-list-container">
-                        {note.info.todos.map((todo, idx) => (
-                            <div key={idx} className="todo-row">
-                                <input
-                                    type="checkbox"
-                                    checked={todo.isDone}
-                                    onChange={(event) =>
-                                        updateTodo(idx, { ...todo, isDone: event.target.checked })
-                                    }
-                                />
-
-                                <input
-                                    className={todo.isDone ? 'checked' : ''}
-                                    type="text"
-                                    value={todo.txt}
-                                    placeholder="List item"
-                                    onInput={(event) =>
-                                        updateTodo(idx, { ...todo, txt: event.target.value })
-                                    }
-                                />
-
-                                <button
-                                    className="btn-remove-todo"
-                                    onClick={() => {
-                                        const newTodos = note.info.todos.filter(
-                                            (todo, i) => i !== idx
-                                        )
-                                        setNote({ ...note, info: { todos: newTodos } })
-                                    }}>
-                                    ✕
-                                </button>
-                            </div>
-                        ))}
-
-                        <div
-                            className="add-todo-btn"
-                            onClick={() =>
-                                updateTodo(note.info.todos.length, { txt: '', isDone: false })
-                            }>
-                            + List item
-                        </div>
-                    </div>
-                )}
-                {note.type === 'NoteImg' && (
-                    <div className="img-container">
-                        <div className="img-inner-container">
-                            <img className="uploaded-img" src={note.info.url} />
-                            <button
-                                className="delete-img"
-                                onClick={() => setNote(noteService.getEmptyNote())}>
-                                <span className="material-symbols-outlined">delete</span>
-                            </button>
-                        </div>
+            <div className="form-container">
+                <div className="form-inputs">
+                    {editMode && (
                         <div>
-                            <input
+                            <input className='form-title'
                                 type="text"
                                 value={note.info.title}
-                                placeholder="Add title"
+                                placeholder="Title"
                                 onInput={(event) =>
                                     setNote({
                                         ...note,
@@ -132,40 +78,145 @@ export function CreateNoteForm({ onCreate }) {
                                 }
                             />
                         </div>
-                        <div>
+                    )}
+                    <div className="input-row">
+                        {note.type === 'NoteTxt' && (
                             <input
                                 type="text"
                                 value={note.info.txt}
                                 placeholder="Take a note..."
                                 onInput={(event) =>
-                                    setNote({
-                                        ...note,
-                                        info: { ...note.info, txt: event.target.value },
-                                    })
+                                    setNote({ ...note, info: { txt: event.target.value } })
                                 }
+                                onFocus={() => setEditMode(true)}
                             />
-                        </div>
+                        )}
+                        {note.type === 'NoteTodos' && (
+                            <div className="todos-list-container">
+                                {note.info.todos.map((todo, idx) => (
+                                    <div key={idx} className="todo-row">
+                                        <input
+                                            type="checkbox"
+                                            checked={todo.isDone}
+                                            onChange={(event) =>
+                                                updateTodo(idx, {
+                                                    ...todo,
+                                                    isDone: event.target.checked,
+                                                })
+                                            }
+                                        />
+
+                                        <input
+                                            className={todo.isDone ? 'checked' : ''}
+                                            type="text"
+                                            value={todo.txt}
+                                            placeholder="List item"
+                                            onInput={(event) =>
+                                                updateTodo(idx, {
+                                                    ...todo,
+                                                    txt: event.target.value,
+                                                })
+                                            }
+                                        />
+                                        <div>
+                                            <button
+                                                className="btn-remove-todo"
+                                                onClick={() => {
+                                                    const newTodos = note.info.todos.filter(
+                                                        (todo, i) => i !== idx
+                                                    )
+                                                    setNote({ ...note, info: { todos: newTodos } })
+                                                }}>
+                                                ✕
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                <div
+                                    className="add-todo-btn"
+                                    onClick={() =>
+                                        updateTodo(note.info.todos.length, {
+                                            txt: '',
+                                            isDone: false,
+                                        })
+                                    }>
+                                    + List item
+                                </div>
+                            </div>
+                        )}
+                        {note.type === 'NoteImg' && (
+                            <div className="img-container">
+                                <div className="img-inner-container">
+                                    <img className="uploaded-img" src={note.info.url} />
+                                    <button className="delete-img" onClick={() => resetForm()}>
+                                        <span className="material-symbols-outlined">delete</span>
+                                    </button>
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={note.info.title}
+                                        placeholder="Add title"
+                                        onInput={(event) =>
+                                            setNote({
+                                                ...note,
+                                                info: { ...note.info, title: event.target.value },
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={note.info.txt}
+                                        placeholder="Take a note..."
+                                        onInput={(event) =>
+                                            setNote({
+                                                ...note,
+                                                info: { ...note.info, txt: event.target.value },
+                                            })
+                                        }
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-                {note.type !== 'NoteImg' && (
+                </div>
+                {note.type !== 'NoteImg' && !editMode && (
                     <React.Fragment>
                         <button
+                            className="round-btn"
                             onClick={() => {
                                 setNote({
                                     ...note,
                                     type: 'NoteTodos',
                                     info: { todos: [{ txt: '', isDone: false }] },
                                 })
+                                setEditMode(true)
                             }}>
                             <i className="fa-regular fa-square-check"></i>
                         </button>
 
-                        <button onClick={uploadFile}>
+                        <button
+                            className="round-btn"
+                            onClick={() => {
+                                uploadFile()
+                                setEditMode(true)
+                            }}>
                             <i className="fa-regular fa-image"></i>
                         </button>
                     </React.Fragment>
                 )}
             </div>
+
+            {editMode && (
+                <div className="close-btn-container">
+                    <button className={'close-form-btn'} onClick={() => resetForm()}>
+                        Close
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
