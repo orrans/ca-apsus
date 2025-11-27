@@ -1,0 +1,80 @@
+.mail-folder-list {
+    width: 100%;
+}
+
+.folder-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.folder-items li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.folder-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #202124;
+    text-align: left;
+    transition: background-color 0.15s ease;
+    position: relative;
+}
+
+.folder-btn:hover {
+    background-color: rgba(32, 33, 36, 0.06);
+}
+
+.folder-btn.active {
+    background-color: #d3e3fd;
+    color: #001d35;
+    font-weight: 600;
+}
+
+.folder-btn.active:hover {
+    background-color: #cbdff7;
+}
+
+.folder-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #5f6368;
+}
+
+.folder-btn.active .folder-icon {
+    color: #001d35;
+}
+
+.folder-name {
+    flex: 1;
+    min-width: 0;
+}
+
+.folder-count {
+    font-size: 0.8125rem;
+    color: #5f6368;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+.folder-btn.active .folder-count {
+    color: #001d35;
+}
+

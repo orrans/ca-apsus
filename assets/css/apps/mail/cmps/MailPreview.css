@@ -1,39 +1,36 @@
 .email-list-item {
     box-sizing: border-box;
     display: flex;
-    font-size: 0.875rem;
+    font-size: 1.2rem;
     align-items: center;
-    max-height: 50px;
-    padding: 5px;
-    gap: 10px;
+    min-height: 48px;
+    padding: 0 16px;
+    gap: 16px;
     width: 100%;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    color: rgb(32, 33, 36);
-    font-weight: bold;
+    max-width: 100%;
+    color: #202124;
+    font-weight: 600;
+    border-bottom: 1px solid #ebebeb;
+    position: relative;
+    transition: background-color 0.1s ease, box-shadow 0.1s ease;
+    overflow: hidden;
 
     &:hover {
         cursor: pointer;
-        background-color: var(--hover-bg-color);
-        border-right: 1px solid rgba(106, 106, 106, 0.425);
-        border-left: 1px solid rgba(106, 106, 106, 0.425);
-        box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-        z-index: 2;
+        background-color: #f8f9fa;
+        box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    }
+
+    &:last-child {
+        border-bottom: none;
     }
 }
 
 .email-list-item.read {
-    font-weight: normal;
-    &:hover {
-        box-shadow: inset 1px 0 0 rgb(218, 220, 224), inset -1px 0 0 rgb(218, 220, 224), 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-    }
-    
-    z-index: 2;
+    font-weight: 450;
+    color: #28292b;
+    border-bottom: 0.5px solid #c2c2c28b;
 }
-
-/* .email-list-item:first-child {
-    border-top: 1px solid rgba(106, 106, 106, 0.425);
-} */
 
 .email-list-item a {
     text-decoration: none;
@@ -41,35 +38,106 @@
     display: flex;
     flex: 1;
     width: 100%;
+    max-width: 100%;
     align-items: center;
-    gap: 10px;
+    gap: 16px;
+    min-width: 0;
+    padding: 4px 0;
+    overflow: hidden;
+}
+
+.preview-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: absolute;
+    right: 16px;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    background: white;
+    padding-left: 16px;
+}
+
+.email-list-item:hover .preview-actions {
+    opacity: 1;
+}
+
+.email-list-item:hover .preview-date {
+    opacity: 0;
 }
 
 .email-list-item button {
-    width: 20px;
-    height: 15px;
-    border-radius: 4px;
-    margin: 5px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin: 0;
     padding: 0;
     border: none;
     background: transparent;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    justify-self: flex-end;
+    transition: background-color 0.1s ease;
+    flex-shrink: 0;
+}
+
+.email-list-item button:hover {
+    background-color: rgba(95, 99, 104, 0.2);
+    cursor: pointer;
 }
 
 .email-list-item button>img {
-    width: 100%;
-    height: 100%;
+    width: 24px;
+    height: 24px;
     display: block;
     object-fit: contain;
+}
 
-    &:hover {
-        cursor: pointer;
-    }
+.preview-from {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: inherit;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+.preview-subject {
+    flex: 1 0 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: inherit;
+    color: inherit;
+}
+
+.preview-body {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 450;
+    color: #5f6368;
 }
 
 .preview-date {
-    justify-self: flex-end;
+    min-width: 60px;
+    max-width: 100px;
+    width: auto;
+    text-align: right;
+    font-size: 0.8125rem;
+    color: #5f6368;
+    flex-shrink: 0;
+    font-weight: 400;
+    margin-left: auto;
+    padding-right: 0;
+    transition: opacity 0.1s ease;
+}
+.preview-left-buttons{
+    display: flex;
 }
