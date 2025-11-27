@@ -1,0 +1,21 @@
+.note-btn {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 24px;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 10%);
+    }
+
+    &.round {
+        height: 40px;
+        width: 40px;
+        padding: 0;
+        border-radius: 50%;
+    }
+}

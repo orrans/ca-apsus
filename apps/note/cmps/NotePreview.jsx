@@ -1,6 +1,7 @@
 import { NoteTxt } from './NoteTxt.jsx'
 import { NoteImg } from './NoteImg.jsx'
 import { NoteTodos } from './NoteTodos.jsx'
+import { NoteColorPicker } from './NoteColorPicker.jsx'
 
 export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
     return (
@@ -20,17 +21,18 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
             {note.type === 'NoteImg' && <NoteImg info={note.info} />}
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
             <section className="actions">
-                <button onClick={() => onRemove(note.id)}>
+                <button className="note-btn round" onClick={() => onRemove(note.id)}>
                     <span className="material-symbols-outlined">delete</span>
                 </button>
-                <input
-                    type="color"
+
+                <NoteColorPicker
                     value={note.style.backgroundColor}
-                    onChange={(event) =>
-                        onUpdateNote({ ...note, style: { backgroundColor: event.target.value } })
+                    onChange={(color) =>
+                        onUpdateNote({ ...note, style: { backgroundColor: color } })
                     }
                 />
-                <button onClick={() => onDuplicate(note)}>
+
+                <button className="note-btn round" onClick={() => onDuplicate(note)}>
                     <span className="material-symbols-outlined">file_copy</span>
                 </button>
             </section>

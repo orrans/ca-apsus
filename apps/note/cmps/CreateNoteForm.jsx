@@ -66,7 +66,8 @@ export function CreateNoteForm({ onCreate }) {
                 <div className="form-inputs">
                     {editMode && (
                         <div>
-                            <input className='form-title'
+                            <input
+                                className="form-title"
                                 type="text"
                                 value={note.info.title}
                                 placeholder="Title"
@@ -120,7 +121,7 @@ export function CreateNoteForm({ onCreate }) {
                                         />
                                         <div>
                                             <button
-                                                className="btn-remove-todo"
+                                                className="btn-remove-todo note-btn round"
                                                 onClick={() => {
                                                     const newTodos = note.info.todos.filter(
                                                         (todo, i) => i !== idx
@@ -149,7 +150,9 @@ export function CreateNoteForm({ onCreate }) {
                             <div className="img-container">
                                 <div className="img-inner-container">
                                     <img className="uploaded-img" src={note.info.url} />
-                                    <button className="delete-img" onClick={() => resetForm()}>
+                                    <button
+                                        className="delete-img note-btn round"
+                                        onClick={() => resetForm()}>
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
@@ -186,7 +189,7 @@ export function CreateNoteForm({ onCreate }) {
                 {note.type !== 'NoteImg' && !editMode && (
                     <React.Fragment>
                         <button
-                            className="round-btn"
+                            className="note-btn round"
                             onClick={() => {
                                 setNote({
                                     ...note,
@@ -199,7 +202,7 @@ export function CreateNoteForm({ onCreate }) {
                         </button>
 
                         <button
-                            className="round-btn"
+                            className="note-btn round"
                             onClick={() => {
                                 uploadFile()
                                 setEditMode(true)
@@ -212,7 +215,7 @@ export function CreateNoteForm({ onCreate }) {
 
             {editMode && (
                 <div className="close-btn-container">
-                    <button className={'close-form-btn'} onClick={() => resetForm()}>
+                    <button className={'close-form-btn note-btn'} onClick={() => resetForm()}>
                         Close
                     </button>
                 </div>

@@ -19,20 +19,20 @@ export function NoteSearchForm({}) {
 
     return (
         <div className="note-search-container">
-            <button className='round-btn'>
+            <button className="note-btn round">
                 <span className="material-symbols-outlined">search</span>
             </button>
             <input
                 className="note-search-bar"
                 type="text"
-                placeholder='Search'
+                placeholder="Search"
                 value={search}
                 onInput={(event) => updateSearch(event.target.value)}
                 onFocus={() => onSearchActiveChange(true)}
             />
             <div>
                 <button
-                    className="note-search-close-btn round-btn"
+                    className="note-search-close-btn note-btn round"
                     onClick={() => onSearchActiveChange(false)}>
                     <span className="material-symbols-outlined">close</span>
                 </button>

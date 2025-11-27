@@ -7,6 +7,7 @@
 
 @import './basics/base.css';
 @import './basics/helpers.css';
+@import './basics/note-buttons.css';
 /* @import './basics/layout.css'; */
 
 /* Pages */
@@ -18,6 +19,7 @@
 @import './apps/note/cmps/CreateNoteForm.css';
 @import './apps/note/cmps/NoteFilterType.css';
 @import './apps/note/cmps/NoteSearchForm.css';
+@import './apps/note/cmps/NoteColorPicker.css';
 
 /* @import './apps/mail/pages/MailIndex.css'; */
 @import './apps/mail/pages/MailIndex.css';
