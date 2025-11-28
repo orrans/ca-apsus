@@ -2,11 +2,13 @@
     position: relative;
     &:hover::after {
         display: block;
+        font-size: 12px;
+        font-family: 'Google Sans Flex','Roboto', 'Arial', 'sans-serif';
         position: absolute;
         content: attr(data-title);
-        background-color: black;
+        background-color: #4f5355;
         border-radius: 4px;
-        padding: 2px 4px;
+        padding: 4px 6px;
         color: white;
         left: 50%;
         top: calc(2lh + 5px);
