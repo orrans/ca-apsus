@@ -11,7 +11,7 @@
         padding: 4px 6px;
         color: white;
         left: 50%;
-        top: calc(2lh + 5px);
+        top: calc(2lh + 10px);
         transform: translateX(-50%);
     }
 }
