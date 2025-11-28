@@ -2,22 +2,17 @@
 
 /* Mobile devices */
 @media (max-width: 768px) {
-    /* Hide Gmail button */
+
     .gmail-btn {
         display: none;
     }
-
-    /* Hide sidebar on mobile */
     .mail-sidebar {
         display: none;
     }
 
-    /* Single column layout */
     .mail-layout {
         grid-template-columns: 1fr;
     }
-
-    /* Floating compose button - smaller, bottom left */
     .compose-btn {
         position: fixed;
         bottom: 20px;
@@ -33,7 +28,6 @@
         height: 20px;
     }
 
-    /* Hide preview body on mobile */
     .preview-body {
         display: none;
     }
