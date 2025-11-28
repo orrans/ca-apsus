@@ -39,6 +39,7 @@ export function NoteColorPicker({ value, onChange }) {
 
     function openPopup(event) {
         const rect = event.currentTarget.getBoundingClientRect()
+        event.stopPropagation()
         setPopupPos({
             top: rect.bottom + 8,
             left: rect.left,
