@@ -4,10 +4,17 @@ import { NoteVideo } from './NoteVideo.jsx'
 import { NoteTodos } from './NoteTodos.jsx'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
 import { NoteInlineEdit } from './NoteInlineEdit.jsx'
+
+const { useNavigate } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 
 export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
     const [edit, setEdit] = useState(false)
+    const navigate = useNavigate()
+
+    function shareToMail() {
+        navigate(`/mail/inbox/compose?subject=${note.info.title || ''}&body=${note.info.txt || ''}`)
+    }
 
     return (
         <article className="note-preview" style={note.style} onClick={() => setEdit(true)}>
@@ -40,6 +47,10 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
 
                 <button className="note-btn round" onClick={() => onDuplicate(note)}>
                     <span className="material-symbols-outlined">file_copy</span>
+                </button>
+
+                <button className="note-btn round" onClick={() => shareToMail()}>
+                    <span className="material-symbols-outlined">outgoing_mail</span>
                 </button>
             </section>
 
