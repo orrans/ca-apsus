@@ -2,10 +2,14 @@ import { NoteTxt } from './NoteTxt.jsx'
 import { NoteImg } from './NoteImg.jsx'
 import { NoteTodos } from './NoteTodos.jsx'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
+import { NoteInlineEdit } from './NoteInlineEdit.jsx'
+const { useState, useEffect, useRef } = React
 
 export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
+    const [edit, setEdit] = useState(false)
+
     return (
-        <article className="note-preview" style={note.style}>
+        <article className="note-preview" style={note.style} onClick={() => setEdit(true)}>
             <div
                 className="pinned"
                 onClick={() => onUpdateNote({ ...note, isPinned: !note.isPinned })}>
@@ -36,6 +40,14 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
                     <span className="material-symbols-outlined">file_copy</span>
                 </button>
             </section>
+
+            {edit && (
+                <NoteInlineEdit
+                    note={note}
+                    onUpdate={(note) => onUpdateNote(note)}
+                    onClose={() => setEdit(false)}
+                />
+            )}
         </article>
     )
 }

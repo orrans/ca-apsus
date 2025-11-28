@@ -20,6 +20,7 @@
 @import './apps/note/cmps/NoteFilterType.css';
 @import './apps/note/cmps/NoteSearchForm.css';
 @import './apps/note/cmps/NoteColorPicker.css';
+@import './apps/note/cmps/NoteInlineEdit.css';
 
 /* @import './apps/mail/pages/MailIndex.css'; */
 @import './apps/mail/pages/MailIndex.css';

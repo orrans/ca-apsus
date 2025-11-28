@@ -1,0 +1,115 @@
+.edit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 200;
+    inset: 0;
+    background-color: rgba(32, 33, 36, 0.6);
+}
+
+.edit-form {
+    box-sizing: content-box;
+    background-color: white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    padding: 10px;
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 10px;
+    width: calc(100vw - 100px);
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 33px;
+
+    & .form-title {
+        font-size: 1.25rem;
+        line-height: 1.25;
+    }
+    & .form-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    & input[type='text'] {
+        width: 100%;
+        border: none;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    & .input-row {
+        display: flex;
+        flex-grow: 1;
+        width: 100%;
+        gap: 10px;
+        align-items: center;
+        input[type='text'] {
+            flex-grow: 1;
+            &.checked {
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    & .form-inputs {
+        flex-grow: 1;
+    }
+
+    & .uploaded-img {
+        width: 100%;
+    }
+
+    & .img-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    & .img-inner-container {
+        flex: 1;
+        position: relative;
+
+        & .delete-img {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+    }
+
+    & .todo-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+
+        & input[type='text'] {
+            flex-grow: 1;
+        }
+
+        & .btn-remove-todo {
+            opacity: 0;
+        }
+
+        &:has(:focus) .btn-remove-todo,
+        &:hover .btn-remove-todo {
+            opacity: 1;
+        }
+
+        &:has(:focus) {
+            border-top-color: black;
+            border-bottom-color: black;
+        }
+    }
+
+    & .todos-list-container {
+        width: 100%;
+    }
+
+    & .close-btn-container {
+        display: flex;
+        justify-content: end;
+    }
+}
