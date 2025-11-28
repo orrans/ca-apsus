@@ -19,7 +19,7 @@
         height: 48px;
         color: #757575;
 
-        &:hover{
+        &:hover {
             color: rgb(32, 33, 36);
         }
     }
@@ -39,7 +39,7 @@
         border: none;
         background-color: transparent;
         font-size: 15px;
-        font-family: 'Roboto', Arial, sans-serif;
+        font-family: var(--font-roboto);
 
         &:focus {
             outline: 0;
@@ -106,8 +106,8 @@
         }
 
         &:has(:focus) {
-            border-top-color: black;
-            border-bottom-color: black;
+            border-top-color: rgba(0, 0, 0, 0.15);
+            border-bottom-color: rgba(0, 0, 0, 0.15);
         }
     }
 

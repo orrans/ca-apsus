@@ -99,18 +99,18 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                                 />
                             )}
                             {note.type === 'NoteTodos' && (
-                                <div className="todos-list-container">
+                                <ul className="todos-list-container">
                                     {note.info.todos.map((todo, idx) => (
-                                        <div key={idx} className="todo-row">
+                                        <li key={idx} className="todo-row">
                                             <input
                                                 type="checkbox"
                                                 checked={todo.isDone}
-                                                onChange={(event) =>
+                                                onChange={(event) => {
                                                     updateTodo(idx, {
                                                         ...todo,
                                                         isDone: event.target.checked,
                                                     })
-                                                }
+                                                }}
                                             />
 
                                             <input
@@ -140,10 +140,10 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                                                     ✕
                                                 </button>
                                             </div>
-                                        </div>
+                                        </li>
                                     ))}
 
-                                    <div
+                                    <li
                                         className="add-todo-btn"
                                         onClick={() =>
                                             updateTodo(note.info.todos.length, {
@@ -152,8 +152,8 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                                             })
                                         }>
                                         + List item
-                                    </div>
-                                </div>
+                                    </li>
+                                </ul>
                             )}
                         </div>
                         {note.type === 'NoteVideo' && (

@@ -1,3 +1,6 @@
 :root {
     --main-bg-color: lightblue;
+
+    --font-google-sans: 'Google Sans Flex', 'Roboto', Arial, sans-serif;
+    --font-roboto: 'Roboto', Arial, sans-serif;
 }

@@ -12,7 +12,6 @@ export const noteService = {
     remove,
     save,
     getEmptyNote,
-    getDefaultFilter,
 }
 
 function query(filterBy = {}) {
@@ -60,11 +59,8 @@ function getEmptyNote() {
         info: {
             txt: '',
         },
+        labels: [],
     }
-}
-
-function getDefaultFilter(filterBy = { title: '', minPrice: 0 }) {
-    return { title: filterBy.title, minPrice: filterBy.minPrice }
 }
 
 // ~~~~~~~~~~~~~~~~LOCAL FUNCTIONS~~~~~~~~~~~~~~~~~~~
@@ -84,6 +80,16 @@ function _createNotes() {
                 info: {
                     txt: 'Fullstack Me Baby!',
                 },
+                labels: [
+                    {
+                        id: 'n101',
+                        name: 'Work',
+                    },
+                    {
+                        id: 'n102',
+                        name: 'School',
+                    },
+                ],
             },
             {
                 id: 'n102',
@@ -97,6 +103,20 @@ function _createNotes() {
                     url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
                     title: 'Bobi and Me',
                 },
+                labels: [
+                    {
+                        id: 'n101',
+                        name: 'Work',
+                    },
+                    {
+                        id: 'n102',
+                        name: 'School',
+                    },
+                    {
+                        id: 'n103',
+                        name: 'Home',
+                    },
+                ],
             },
             {
                 id: 'n103',
@@ -113,6 +133,20 @@ function _createNotes() {
                         { txt: 'Coding power', isDone: false },
                     ],
                 },
+                labels: [
+                    {
+                        id: 'n101',
+                        name: 'Work',
+                    },
+                    {
+                        id: 'n102',
+                        name: 'School',
+                    },
+                    {
+                        id: 'n103',
+                        name: 'Home',
+                    },
+                ],
             },
         ]
         utilService.saveToStorage(NOTE_KEY, notes)

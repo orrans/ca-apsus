@@ -4,6 +4,8 @@ import { NoteVideo } from './NoteVideo.jsx'
 import { NoteTodos } from './NoteTodos.jsx'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
 import { NoteInlineEdit } from './NoteInlineEdit.jsx'
+import { NoteLabelPicker } from './NoteLabelPicker.jsx'
+import { NoteLabels } from './NoteLabels.jsx'
 
 const { useNavigate } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
@@ -33,6 +35,7 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
             {note.type === 'NoteImg' && <NoteImg info={note.info} />}
             {note.type === 'NoteVideo' && <NoteVideo info={note.info} />}
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
+            <NoteLabels labels={note.labels} limit={2} />
             <section className="actions">
                 <button className="note-btn round" onClick={() => onRemove(note.id)}>
                     <span className="material-symbols-outlined">delete</span>
@@ -52,8 +55,12 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
                 <button className="note-btn round" onClick={() => shareToMail()}>
                     <span className="material-symbols-outlined">outgoing_mail</span>
                 </button>
-            </section>
 
+                <NoteLabelPicker
+                    value={note.labels}
+                    onChange={(labels) => onUpdateNote({ ...note, labels: labels })}
+                />
+            </section>
             {edit && (
                 <NoteInlineEdit
                     note={note}

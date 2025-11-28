@@ -7,7 +7,7 @@ export function AppHeader() {
         <header>
             <div className="app-header">
                 <Link className="logo" to="/">
-                    <img src="/assets/img/logo.png" />
+                    <img src="./assets/img/logo.png" />
                 </Link>
                 <Routes>
                     <Route path="/note" element={<NoteSearchForm />} />
