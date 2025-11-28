@@ -25,6 +25,12 @@ export function NoteFilterType({ onFilterChange }) {
                     </div>
                     <div className="filter-txt">Image</div>
                 </div>
+                <div className="filter" onClick={() => onFilterChange('NoteVideo')}>
+                    <div className="filter-icon-container">
+                        <span className="material-symbols-outlined">youtube_activity</span>
+                    </div>
+                    <div className="filter-txt">Video</div>
+                </div>
             </div>
         </div>
     )

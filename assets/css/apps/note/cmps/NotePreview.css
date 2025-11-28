@@ -23,6 +23,16 @@
             opacity: 1;
         }
     }
+
+    & h2,
+    & p {
+        word-break: break-all;
+    }
+
+    p {
+        max-height: 25lh;
+        overflow-y: hidden;
+    }
 }
 
 .actions {

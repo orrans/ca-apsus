@@ -45,7 +45,7 @@ export function NoteColorPicker({ value, onChange }) {
         })
         setIsOpen((prev) => !prev)
     }
-console.log(value)
+
     return (
         <div className="color-picker-container" ref={containerRef}>
             <button className="note-btn round" ref={buttonRef} onClick={openPopup}>
@@ -58,7 +58,10 @@ console.log(value)
                         className={`note-btn round ${
                             !value || value === '#ffffff' ? `selected` : ''
                         }`}
-                        onClick={() => onChange('#ffffff')}>
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            onChange('#ffffff')
+                        }}>
                         <span className="material-symbols-outlined">format_color_reset</span>
                         <div className="selected-mark">
                             <span className="material-symbols-outlined">check</span>
@@ -69,7 +72,10 @@ console.log(value)
                         <button
                             key={color}
                             className={`note-btn round ${value === color ? `selected` : ''}`}
-                            onClick={() => onChange(color)}
+                            onClick={(event) => {
+                                event.stopPropagation()
+                                onChange(color)
+                            }}
                             style={{ backgroundColor: color, color: color }}>
                             <div className="selected-mark">
                                 <span className="material-symbols-outlined">check</span>

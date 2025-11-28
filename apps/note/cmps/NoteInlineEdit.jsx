@@ -1,4 +1,5 @@
 import { utilService } from '../../../services/util.service.js'
+import { NoteColorPicker } from './NoteColorPicker.jsx'
 import { NoteVideo } from './NoteVideo.jsx'
 
 const { useState, useEffect, useRef } = React
@@ -22,7 +23,7 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
         input.onchange = (event) => {
             const file = event.target.files[0]
             utilService.fileToBase64(file).then((file) => {
-                setNote({ ...note, type: 'NoteImg', info: { url: file } })
+                setNote({ ...note, type: 'NoteImg', info: { ...note.info, url: file } })
             })
         }
         input.click()
@@ -37,13 +38,42 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                 onClose()
             }}>
             <div className="edit-form" onClick={(event) => event.stopPropagation()}>
+                <div
+                    className="pinned"
+                    onClick={() => setNote({ ...note, isPinned: !note.isPinned })}>
+                    <span
+                        className={
+                            (note.isPinned ? 'material-symbols-filled' : '') +
+                            ' material-symbols-outlined'
+                        }>
+                        keep
+                    </span>
+                </div>
                 <div className="form-container">
                     <div className="form-inputs">
+                        {note.type === 'NoteImg' && (
+                            <div className="img-container">
+                                <div className="img-inner-container">
+                                    <img className="uploaded-img" src={note.info.url} />
+                                    <button
+                                        className="delete-img note-btn round"
+                                        onClick={() =>
+                                            setNote({
+                                                ...note,
+                                                type: note.info.todos ? 'NoteTodos' : 'NoteTxt',
+                                                info: { ...note.info, url: '' },
+                                            })
+                                        }>
+                                        <span className="material-symbols-outlined">delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         <div>
                             <input
                                 className="form-title"
                                 type="text"
-                                value={note.info.title}
+                                value={note.info.title || ''}
                                 placeholder="Title"
                                 onInput={(event) =>
                                     setNote({
@@ -55,10 +85,10 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                         </div>
 
                         <div className="input-row">
-                            {note.type === 'NoteTxt' && (
+                            {(note.type === 'NoteTxt' || note.type === 'NoteImg') && (
                                 <input
                                     type="text"
-                                    value={note.info.txt}
+                                    value={note.info.txt || ''}
                                     placeholder="Take a note..."
                                     onInput={(event) =>
                                         setNote({
@@ -86,7 +116,7 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                                             <input
                                                 className={todo.isDone ? 'checked' : ''}
                                                 type="text"
-                                                value={todo.txt}
+                                                value={todo.txt || ''}
                                                 placeholder="List item"
                                                 onInput={(event) =>
                                                     updateTodo(idx, {
@@ -125,55 +155,12 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                                     </div>
                                 </div>
                             )}
-                            {note.type === 'NoteImg' && (
-                                <div className="img-container">
-                                    <div className="img-inner-container">
-                                        <img className="uploaded-img" src={note.info.url} />
-                                        <button
-                                            className="delete-img note-btn round"
-                                            onClick={() => resetForm()}>
-                                            <span className="material-symbols-outlined">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <input
-                                            type="text"
-                                            value={note.info.title}
-                                            placeholder="Add title"
-                                            onInput={(event) =>
-                                                setNote({
-                                                    ...note,
-                                                    info: {
-                                                        ...note.info,
-                                                        title: event.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                    <div>
-                                        <input
-                                            type="text"
-                                            value={note.info.txt}
-                                            placeholder="Take a note..."
-                                            onInput={(event) =>
-                                                setNote({
-                                                    ...note,
-                                                    info: { ...note.info, txt: event.target.value },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            )}
                         </div>
                         {note.type === 'NoteVideo' && (
                             <div>
                                 <input
                                     type="text"
-                                    value={note.info.url}
+                                    value={note.info.url || ''}
                                     placeholder="Enter YouTube URL..."
                                     onInput={(event) =>
                                         setNote({
@@ -188,7 +175,22 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                     </div>
                 </div>
 
-                <div className="close-btn-container">
+                <div className="toolbar-container">
+                    <NoteColorPicker
+                        value={note.style.backgroundColor || ''}
+                        onChange={(color) =>
+                            setNote({ ...note, style: { backgroundColor: color } })
+                        }
+                    />
+
+                    <button
+                        className="note-btn round"
+                        onClick={() => {
+                            uploadFile()
+                        }}>
+                        <span className="material-symbols-outlined">image</span>
+                    </button>
+                    <div className="space"></div>
                     <button
                         className={'close-form-btn note-btn'}
                         onClick={() => {

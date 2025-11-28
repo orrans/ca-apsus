@@ -9,6 +9,7 @@
 }
 
 .edit-form {
+    position: relative;
     box-sizing: content-box;
     background-color: white;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
@@ -108,8 +109,29 @@
         width: 100%;
     }
 
-    & .close-btn-container {
+    & .toolbar-container {
         display: flex;
         justify-content: end;
+
+        & .note-btn.round {
+            width: 32px;
+            height: 32px;
+
+            & .material-symbols-outlined {
+                font-size: 16px;
+            }
+        }
+    }
+
+    & .space {
+        flex: 1;
+    }
+
+    & .pinned {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
     }
 }
