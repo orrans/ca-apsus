@@ -22,6 +22,7 @@ export function MailIndex() {
     const folderFromUrl = params.folder || params.emailId
     const currentFolder = folderFromUrl || 'inbox'
     const validFolders = ['inbox', 'sent', 'trash', 'draft', 'starred', 'important', 'archive']
+    const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
     
     // Check if we're on the compose route by checking the pathname
     const isComposeOpen = location.pathname.endsWith('/compose')
@@ -227,7 +228,7 @@ export function MailIndex() {
                     onClick={() => navigate('/mail')}
                     title="Gmail"
                 >
-                    <img className="gmail-icon" src="/ca-apsus/assets/img/mail-imgs/gmail-icon.png" alt="Gmail" />
+                    <img className="gmail-icon" src={`${basePath}/assets/img/mail-imgs/gmail-icon.png`} alt="Gmail" />
                     Gmail
                 </button>
                 <MailFilter 
@@ -244,7 +245,7 @@ export function MailIndex() {
                         type="button"
                         onClick={() => navigate(`/mail/${currentFolder}/compose`)}
                     >
-                        <img src="/ca-apsus/assets/img/mail-imgs/edit-pen.svg" alt="compose" />
+                        <img src={`${basePath}/assets/img/mail-imgs/edit-pen.svg`} alt="compose" />
                         Compose
                     </button>
                     <MailFolderList />

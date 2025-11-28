@@ -29,48 +29,49 @@ export function MailFolderList() {
         //get current folder from URL params (if none, use inbox)
     const folderFromUrl = params.folder || params.emailId  
     const currentFolder = validFolders.includes(folderFromUrl) ? folderFromUrl : 'inbox'
+    const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
 
     const folders = [
         {
             id: 'inbox',
             name: 'Inbox',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/inbox.svg" alt="inbox" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/inbox.svg`} alt="inbox" />,
             count: emailCounts && emailCounts.inbox || 0
         },
         {
             id: 'sent',
             name: 'Sent',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/send.svg" alt="sent" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/send.svg`} alt="sent" />,
             count: emailCounts && emailCounts.sent || 0
         },
         {
             id: 'trash',
             name: 'Trash',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/delete.svg" alt="trash" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/delete.svg`} alt="trash" />,
             count: emailCounts && emailCounts.trash || 0
         },
         {
             id: 'draft',
             name: 'Drafts',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/draft.svg" alt="draft" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/draft.svg`} alt="draft" />,
             count: emailCounts && emailCounts.draft || 0
         },
         {
             id: 'starred',
             name: 'Starred',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/star.svg" alt="starred" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/star.svg`} alt="starred" />,
             count: emailCounts && emailCounts.starred || 0
         },
         {
             id: 'important',
             name: 'Important',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/important.svg" alt="important" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/important.svg`} alt="important" />,
             count: emailCounts && emailCounts.important || 0
         },
         {
             id: 'archive',
             name: 'Archive',
-            icon: <img src="/ca-apsus/assets/img/mail-imgs/archive.svg" alt="archive" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/archive.svg`} alt="archive" />,
             count: emailCounts && emailCounts.archive || 0
         }
     ]
