@@ -1,18 +1,43 @@
-import { getDayName, isToday, getTimeString } from '../../../services/util.service.js'
-const { Link } = ReactRouterDOM
-export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail, onToggleReadStatus, onSnoozeEmail, onSelectEmail, onStarEmail, onImportantEmail }) {
+import { emailService } from '../services/mail.service.js'
+const { Link, useNavigate } = ReactRouterDOM
+export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail, onToggleReadStatus, onSnoozeEmail, onSelectEmail, onStarEmail, onImportantEmail, currentFolder }) {
+    const navigate = useNavigate()
     const sentAt = new Date(email.sentAt)
-    const isTodayFlag = isToday(sentAt)
-    const timeString = getTimeString(sentAt)
     const starIcon = email.isStarred ? 'star_filled' : 'star_border'
     const importantIcon = email.isImportant ? 'important-filled' : 'important'
+
+    function handleEmailClick(e) {
+        // Don't navigate if clicking on checkbox or buttons
+        if (e.target.type === 'checkbox' || e.target.closest('.preview-left-buttons')) {
+            e.preventDefault()
+            return
+        }
+        if (currentFolder === 'draft') {
+            e.preventDefault()
+            const newSearchParams = new URLSearchParams()
+            if (email.to) newSearchParams.set('to', email.to)
+            if (email.subject) newSearchParams.set('subject', email.subject)
+            if (email.body) newSearchParams.set('body', email.body)
+            navigate(`/mail/${currentFolder}/compose?${newSearchParams.toString()}`)
+        }
+    }
+
     return (
-        <li className={`email-list-item ${email.isRead ? 'read' : ''}`}>
-            <Link to={`/mail/${email.id}`}>
+        <li className={`email-list-item ${email.isRead ? 'read' : ''} ${email.isSelected ? 'checked' : ''}`}>
+            <Link to={`/mail/${email.id}`} onClick={handleEmailClick}>
                 <div className="preview-left-buttons">
-                    <button title="Select" onClick={(e) => { e.stopPropagation(); e.preventDefault(); onSelectEmail(email.id) }}>
-                        <img src={`../../../assets/img/mail-imgs/select.svg`} alt="Select" />
-                    </button>
+                    <input 
+                        type="checkbox" 
+                        title="Select"
+                        checked={email.isSelected || false}
+                        onChange={(e) => {
+                            e.stopPropagation();
+                            if (onSelectEmail) onSelectEmail(email.id);
+                        }}
+                        onClick={(e) => {   //because of link
+                            e.stopPropagation();
+                        }}
+                    />
                     <button title="star" onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
@@ -44,7 +69,7 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
                 )}
                 {/* Part 4: Date */}
                 <div className="preview-date">
-                    {isTodayFlag ? timeString : sentAt.toLocaleDateString()}
+                    {emailService.getDateString(sentAt)}
                 </div>
             </Link>
             <div className="preview-actions">
