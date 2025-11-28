@@ -65,7 +65,7 @@ export function MailFolderList() {
         {
             id: 'important',
             name: 'Important',
-            icon: <img src={`${basePath}/assets/img/mail-imgs/important.svg`} alt="important" />,
+            icon: <img src={`${basePath}/assets/img/mail-imgs/important-black.svg`} alt="important" />,
             count: emailCounts && emailCounts.important || 0
         },
         {

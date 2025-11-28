@@ -1,7 +1,7 @@
 .email-list-item {
     box-sizing: border-box;
     display: flex;
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     align-items: center;
     min-height: 38px;
     padding: 0 16px;

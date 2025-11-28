@@ -1,0 +1,49 @@
+/* Media Queries for Mobile Responsiveness */
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    /* Hide Gmail button */
+    .gmail-btn {
+        display: none;
+    }
+
+    /* Hide sidebar on mobile */
+    .mail-sidebar {
+        display: none;
+    }
+
+    /* Single column layout */
+    .mail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Floating compose button - smaller, bottom left */
+    .compose-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 140px !important;
+        height: 48px;
+        z-index: 100;
+    }
+
+    .compose-btn img {
+        margin-right: 0;
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Hide preview body on mobile */
+    .preview-body {
+        display: none;
+    }
+
+    /* Full screen modal */
+    .modal-content {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+}
+

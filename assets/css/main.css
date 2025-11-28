@@ -1,6 +1,7 @@
 /* Setup */
 
 @import './setup/variables.css';
+@import './setup/mq.css';
 /* @import './setup/fonts.css'; */
 
 /* Basics */
