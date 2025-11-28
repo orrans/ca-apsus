@@ -1,0 +1,29 @@
+.book-preview {
+    text-align: center;
+    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.book-preview h2 {
+    text-transform: capitalize;
+    color: var(--clr1bg-light);
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+}
+
+.book-preview h4 {
+    color: var(--clr2);
+    margin: 0.3em 0;
+    font-size: 0.9em;
+}
+
+.book-preview img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 4px;
+    margin: 0.5em 0;
+}
+

@@ -7,7 +7,9 @@ import { Home } from "./pages/Home.jsx"
 import { MailIndex } from "./apps/mail/pages/MailIndex.jsx"
 import { MailDetails } from "./apps/mail/pages/MailDetails.jsx"
 import { NoteIndex } from "./apps/note/pages/NoteIndex.jsx"
-
+import { BookIndex } from "./apps/book/pages/BookIndex.jsx"
+import { BookDetails } from "./apps/book/pages/BookDetails.jsx"
+import { BookEdit } from "./apps/book/pages/BookEdit.jsx"
 
 
 export function App() {
@@ -23,6 +25,11 @@ export function App() {
                     <Route path=":emailId" element={<MailDetails />} />
                 </Route>
                 <Route path="/note" element={<NoteIndex />} />
+                <Route path="/book" element={<BookIndex />}>
+                    <Route path=":bookId" element={<BookDetails />} />
+                    <Route path="edit" element={<BookEdit />} />
+                    <Route path="edit/:bookId" element={<BookEdit />} />
+                </Route>
             </Routes>
         </section>
     </Router>
