@@ -2,18 +2,60 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    column-gap: 15px;
+    column-gap: 10px;
     column-count: 1;
+    font-family: 'Roboto', sans-serif;
+}
+
+.notes-container {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 120px;
+}
+
+.notes-container .note-list-title {
+    margin-top: 60px;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #5f6368;
 }
 
 .note-list li {
     break-inside: avoid;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+
+}
+
+.note-preview .note-todos ul li {
+    font-family: 'Google Sans Flex','Roboto', Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    color: #202124;
+}
+
+.note-preview h4 {
+    font-family: 'Google Sans Flex','Roboto', Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    letter-spacing: .00625em;
+    color: #202124;
+    margin: 0 0 5px 0;
 }
 
 @media (min-width: 600px) {
     .note-list {
         column-count: 2;
+    }
+
+    .notes-container {
+        padding: 0 20px;
     }
 }
 
@@ -21,16 +63,24 @@
     .note-list {
         column-count: 3;
     }
+
+    .notes-container {
+        padding: 0 50px;
+    }
 }
 
 @media (min-width: 1200px) {
     .note-list {
         column-count: 5;
     }
+
+    .notes-container {
+        padding: 0 120px;
+    }
 }
 
 @media (min-width: 1500px) {
     .note-list {
-        column-count: 6;
+        column-count: 7;
     }
 }

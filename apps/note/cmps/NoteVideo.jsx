@@ -3,11 +3,11 @@ export function NoteVideo({ info }) {
 
     return (
         <div className="note-txt">
-            <h2>{info.title}</h2>
+            {info.title && <h2>{info.title}</h2>}
             <p>
                 {
                     <iframe
-                        width='100%'
+                        width="100%"
                         height="315"
                         src={url}
                         title="YouTube video player"

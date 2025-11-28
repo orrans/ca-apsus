@@ -1,15 +1,28 @@
 .create-form {
+    box-sizing: border-box;
     position: relative;
     box-sizing: content-box;
     background-color: white;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    padding: 10px;
+    padding: 12px 16px;
     border: 1px solid rgb(224, 224, 224);
     border-radius: 10px;
-    max-width: 554px;
+    max-width: 598px;
     margin: 0 auto;
     margin-top: 33px;
     transition: all 0.2s;
+
+    & .note-type-btn {
+        margin-top: -16px;
+        margin-bottom: -16px;
+        width: 48px;
+        height: 48px;
+        color: #757575;
+
+        &:hover{
+            color: rgb(32, 33, 36);
+        }
+    }
 
     & .form-title {
         font-size: 1.25rem;
@@ -25,6 +38,8 @@
         width: 100%;
         border: none;
         background-color: transparent;
+        font-size: 15px;
+        font-family: 'Roboto', Arial, sans-serif;
 
         &:focus {
             outline: 0;
