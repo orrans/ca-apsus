@@ -1,5 +1,6 @@
 import { NoteTxt } from './NoteTxt.jsx'
 import { NoteImg } from './NoteImg.jsx'
+import { NoteVideo } from './NoteVideo.jsx'
 import { NoteTodos } from './NoteTodos.jsx'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
 import { NoteInlineEdit } from './NoteInlineEdit.jsx'
@@ -23,6 +24,7 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
             </div>
             {note.type === 'NoteTxt' && <NoteTxt info={note.info} />}
             {note.type === 'NoteImg' && <NoteImg info={note.info} />}
+            {note.type === 'NoteVideo' && <NoteVideo info={note.info} />}
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
             <section className="actions">
                 <button className="note-btn round" onClick={() => onRemove(note.id)}>

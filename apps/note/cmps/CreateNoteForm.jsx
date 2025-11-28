@@ -184,6 +184,19 @@ export function CreateNoteForm({ onCreate }) {
                                 </div>
                             </div>
                         )}
+                        {note.type === 'NoteVideo' && (
+                            <input
+                                type="text"
+                                value={note.info.url}
+                                placeholder="Enter YouTube URL..."
+                                onInput={(event) =>
+                                    setNote({
+                                        ...note,
+                                        info: { ...note.info, url: event.target.value },
+                                    })
+                                }
+                            />
+                        )}
                     </div>
                 </div>
                 {note.type !== 'NoteImg' && !editMode && (
@@ -198,7 +211,7 @@ export function CreateNoteForm({ onCreate }) {
                                 })
                                 setEditMode(true)
                             }}>
-                            <i className="fa-regular fa-square-check"></i>
+                            <span className="material-symbols-outlined">check_box</span>
                         </button>
 
                         <button
@@ -207,7 +220,20 @@ export function CreateNoteForm({ onCreate }) {
                                 uploadFile()
                                 setEditMode(true)
                             }}>
-                            <i className="fa-regular fa-image"></i>
+                            <span className="material-symbols-outlined">image</span>
+                        </button>
+
+                        <button
+                            className="note-btn round"
+                            onClick={() => {
+                                setNote({
+                                    ...note,
+                                    type: 'NoteVideo',
+                                    info: { url: '' },
+                                })
+                                setEditMode(true)
+                            }}>
+                            <span className="material-symbols-outlined">youtube_activity</span>
                         </button>
                     </React.Fragment>
                 )}

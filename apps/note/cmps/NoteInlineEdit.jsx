@@ -1,4 +1,5 @@
 import { utilService } from '../../../services/util.service.js'
+import { NoteVideo } from './NoteVideo.jsx'
 
 const { useState, useEffect, useRef } = React
 
@@ -168,6 +169,22 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                                 </div>
                             )}
                         </div>
+                        {note.type === 'NoteVideo' && (
+                            <div>
+                                <input
+                                    type="text"
+                                    value={note.info.url}
+                                    placeholder="Enter YouTube URL..."
+                                    onInput={(event) =>
+                                        setNote({
+                                            ...note,
+                                            info: { ...note.info, url: event.target.value },
+                                        })
+                                    }
+                                />
+                                <NoteVideo info={{ ...note.info, title: '' }} />
+                            </div>
+                        )}
                     </div>
                 </div>
 
