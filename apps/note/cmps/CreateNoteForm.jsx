@@ -2,12 +2,26 @@ import { utilService } from '../../../services/util.service.js'
 import { noteService } from '../services/note.service.js'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
 
+// /email/compose? title=my note & body= note about the rain
+
 const { useState, useEffect, useRef } = React
 
 export function CreateNoteForm({ onCreate }) {
     const [note, setNote] = useState(noteService.getEmptyNote())
     const formRef = useRef(null)
     const [editMode, setEditMode] = useState(false)
+
+    useEffect(() => {
+        const search = window.location.search
+        const params = Object.fromEntries(new URLSearchParams(search))
+        if (params.title || params.body) {
+            setEditMode(true)
+            setNote({
+                ...note,
+                info: { ...note.info, title: params.title || '', txt: params.body || '' },
+            })
+        }
+    }, [])
 
     useEffect(() => {
         function handleClickOutside(event) {
