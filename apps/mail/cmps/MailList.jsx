@@ -1,6 +1,6 @@
 import { EmailPreview } from './MailPreview.jsx'
 
-export function EmailList({ emails, onRemoveEmail, onReadEmail, onArchiveEmail, onToggleReadStatus, onSnoozeEmail, onStarEmail, onImportantEmail }) {
+export function EmailList({ emails, onRemoveEmail, onReadEmail, onArchiveEmail, onToggleReadStatus, onSnoozeEmail, onSelectEmail, onStarEmail, onImportantEmail, currentFolder }) {
     return (
         <ul className="email-list-container">
             {emails.map(email => (
@@ -12,8 +12,10 @@ export function EmailList({ emails, onRemoveEmail, onReadEmail, onArchiveEmail, 
                     onArchiveEmail={onArchiveEmail}
                     onToggleReadStatus={onToggleReadStatus}
                     onSnoozeEmail={onSnoozeEmail}
+                    onSelectEmail={onSelectEmail}
                     onStarEmail={onStarEmail}
                     onImportantEmail={onImportantEmail}
+                    currentFolder={currentFolder}
                 />
             ))}
         </ul>

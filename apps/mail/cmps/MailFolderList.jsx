@@ -24,7 +24,7 @@ export function MailFolderList() {
     // Refresh counts when folder changes (like sent/trash work)
     useEffect(() => {
         loadEmailCounts()
-    }, [params.folder, params.emailId])
+    }, [params.folder, params.emailId, emailCounts])
 
         //get current folder from URL params (if none, use inbox)
     const folderFromUrl = params.folder || params.emailId  

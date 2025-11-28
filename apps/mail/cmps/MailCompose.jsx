@@ -2,20 +2,35 @@ import { emailService } from '../services/mail.service.js'
 import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import '../../../../assets/css/apps/mail/cmps/MailCompose.css'
-const { useState } = React
+const { useState , useEffect} = React
 
-export function ComposeEmail({ onEmailAdded, onClose, onDraftSave }) {
-    const [newEmail, setNewEmail] = useState({ to: '', subject: '', body: '' })
+export function ComposeEmail({ onEmailAdded, onClose, onDraftSave, initialValues = {} }) {
+    const [newEmail, setNewEmail] = useState({ 
+        to: initialValues.to || '', 
+        subject: initialValues.subject || '', 
+        body: initialValues.body || '' 
+    })
     const emailRef = React.useRef(newEmail)
     const wasSentRef = React.useRef(false)
 
+    // Sync state when initialValues change
+    useEffect(() => {
+        if (initialValues.to || initialValues.subject || initialValues.body) {
+            setNewEmail(prev => ({
+                to: initialValues.to || prev.to,
+                subject: initialValues.subject || prev.subject,
+                body: initialValues.body || prev.body
+            }))
+        }
+    }, [initialValues.to, initialValues.subject, initialValues.body])
+
     // Keep ref in sync with state
-    React.useEffect(() => {
+    useEffect(() => {
         emailRef.current = newEmail
     }, [newEmail])
 
     // Save draft when component unmounts (modal closes) if there's content and email wasn't sent
-    React.useEffect(() => {
+    useEffect(() => {
         return () => {
             if (!wasSentRef.current) {
                 const { to, subject, body } = emailRef.current
