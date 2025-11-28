@@ -5,6 +5,7 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
     const sentAt = new Date(email.sentAt)
     const starIcon = email.isStarred ? 'star_filled' : 'star_border'
     const importantIcon = email.isImportant ? 'important-filled' : 'important'
+    const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
 
     function handleEmailClick(e) {
         // Don't navigate if clicking on checkbox or buttons
@@ -43,14 +44,14 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
                         e.preventDefault()
                         onStarEmail(email.id)
                     }}>
-                        <img src={`../../../assets/img/mail-imgs/${starIcon}.svg`} alt="Star" />
+                        <img src={`${basePath}/assets/img/mail-imgs/${starIcon}.svg`} alt="Star" />
                     </button>
                     <button title="important" onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
                         onImportantEmail(email.id)
                     }}>
-                        <img src={`../../../assets/img/mail-imgs/${importantIcon}.svg`} alt="Important" />
+                        <img src={`${basePath}/assets/img/mail-imgs/${importantIcon}.svg`} alt="Important" />
                     </button>
                 </div>
                 {/* Part 1: From */}
@@ -74,16 +75,16 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
             </Link>
             <div className="preview-actions">
                 <button title="Archive" onClick={(e) => { e.stopPropagation(); onArchiveEmail(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/archive.svg" alt="Archive" />
+                    <img src={`${basePath}/assets/img/mail-imgs/archive.svg`} alt="Archive" />
                 </button>
                 <button title="Delete" onClick={(e) => { e.stopPropagation(); onRemoveEmail(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/delete.svg" alt="Delete" />
+                    <img src={`${basePath}/assets/img/mail-imgs/delete.svg`} alt="Delete" />
                 </button>
                 <button title={email.isRead ? "Mark as unread" : "Mark as read"} onClick={(e) => { e.stopPropagation(); onToggleReadStatus(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/mark_email_unread.svg" alt={email.isRead ? "Mark as unread" : "Mark as read"} />
+                    <img src={`${basePath}/assets/img/mail-imgs/mark_email_unread.svg`} alt={email.isRead ? "Mark as unread" : "Mark as read"} />
                 </button>
                 <button title="Snooze" onClick={(e) => { e.stopPropagation(); onSnoozeEmail(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/snooze.svg" alt="Snooze" />
+                    <img src={`${basePath}/assets/img/mail-imgs/snooze.svg`} alt="Snooze" />
                 </button>
             </div>
         </li>
