@@ -227,7 +227,7 @@ export function MailIndex() {
                     onClick={() => navigate('/mail')}
                     title="Gmail"
                 >
-                    <img className="gmail-icon" src="../../../assets/img/mail-imgs/gmail-icon.png" alt="Gmail" />
+                    <img className="gmail-icon" src="/ca-apsus/assets/img/mail-imgs/gmail-icon.png" alt="Gmail" />
                     Gmail
                 </button>
                 <MailFilter 
@@ -244,7 +244,7 @@ export function MailIndex() {
                         type="button"
                         onClick={() => navigate(`/mail/${currentFolder}/compose`)}
                     >
-                        <img src="../../../assets/img/mail-imgs/edit-pen.svg" alt="compose" />
+                        <img src="/ca-apsus/assets/img/mail-imgs/edit-pen.svg" alt="compose" />
                         Compose
                     </button>
                     <MailFolderList />

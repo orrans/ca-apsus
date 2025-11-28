@@ -43,14 +43,14 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
                         e.preventDefault()
                         onStarEmail(email.id)
                     }}>
-                        <img src={`../../../assets/img/mail-imgs/${starIcon}.svg`} alt="Star" />
+                        <img src={`/ca-apsus/assets/img/mail-imgs/${starIcon}.svg`} alt="Star" />
                     </button>
                     <button title="important" onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
                         onImportantEmail(email.id)
                     }}>
-                        <img src={`../../../assets/img/mail-imgs/${importantIcon}.svg`} alt="Important" />
+                        <img src={`/ca-apsus/assets/img/mail-imgs/${importantIcon}.svg`} alt="Important" />
                     </button>
                 </div>
                 {/* Part 1: From */}
@@ -74,16 +74,16 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
             </Link>
             <div className="preview-actions">
                 <button title="Archive" onClick={(e) => { e.stopPropagation(); onArchiveEmail(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/archive.svg" alt="Archive" />
+                    <img src="/ca-apsus/assets/img/mail-imgs/archive.svg" alt="Archive" />
                 </button>
                 <button title="Delete" onClick={(e) => { e.stopPropagation(); onRemoveEmail(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/delete.svg" alt="Delete" />
+                    <img src="/ca-apsus/assets/img/mail-imgs/delete.svg" alt="Delete" />
                 </button>
                 <button title={email.isRead ? "Mark as unread" : "Mark as read"} onClick={(e) => { e.stopPropagation(); onToggleReadStatus(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/mark_email_unread.svg" alt={email.isRead ? "Mark as unread" : "Mark as read"} />
+                    <img src="/ca-apsus/assets/img/mail-imgs/mark_email_unread.svg" alt={email.isRead ? "Mark as unread" : "Mark as read"} />
                 </button>
                 <button title="Snooze" onClick={(e) => { e.stopPropagation(); onSnoozeEmail(email.id) }}>
-                    <img src="../../../assets/img/mail-imgs/snooze.svg" alt="Snooze" />
+                    <img src="/ca-apsus/assets/img/mail-imgs/snooze.svg" alt="Snooze" />
                 </button>
             </div>
         </li>
