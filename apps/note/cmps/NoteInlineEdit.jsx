@@ -190,6 +190,19 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                         }}>
                         <span className="material-symbols-outlined">image</span>
                     </button>
+
+                    <button
+                        className="note-btn round"
+                        onClick={() => {
+                            setNote({
+                                ...note,
+                                type: 'NoteVideo',
+                                info: { url: '' },
+                            })
+                            setEditMode(true)
+                        }}>
+                        <span className="material-symbols-outlined">movie</span>
+                    </button>
                     <div className="space"></div>
                     <button
                         className={'close-form-btn note-btn'}

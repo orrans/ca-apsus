@@ -238,7 +238,7 @@ export function CreateNoteForm({ onCreate }) {
                                 })
                                 setEditMode(true)
                             }}>
-                            <span className="material-symbols-outlined">youtube_activity</span>
+                            <span className="material-symbols-outlined">movie</span>
                         </button>
                     </React.Fragment>
                 )}
