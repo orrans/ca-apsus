@@ -18,6 +18,7 @@ export function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/mail" element={<MailIndex />} >
+                    <Route path=":folder/compose" element={null} />
                     <Route path=":folder/:emailId" element={<MailDetails />} />
                     <Route path=":emailId" element={<MailDetails />} />
                 </Route>

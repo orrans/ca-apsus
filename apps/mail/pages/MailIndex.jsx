@@ -5,35 +5,47 @@ import { showSuccessMsg, showErrorMsg, eventBusService } from '../../../services
 import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 
-const { useState, useEffect } = React
-const { useNavigate, useSearchParams, useParams, Outlet } = ReactRouterDOM
+const { useState, useEffect ,useRef} = React
+const { useNavigate, useSearchParams, useParams, useLocation, Outlet } = ReactRouterDOM
 
 export function MailIndex() {
     const [emails, setEmails] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [isComposeOpen, setIsComposeOpen] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
     
+    const location = useLocation()
     const [searchParams, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
     const params = useParams()
+    
     // Get folder from params - could be in folder param or emailId param (if it's a folder name)
     const folderFromUrl = params.folder || params.emailId
     const currentFolder = folderFromUrl || 'inbox'
     const validFolders = ['inbox', 'sent', 'trash', 'draft', 'starred', 'important', 'archive']
-    // Determine if an email is selected: emailId exists and is not a folder name
-    const selectedMailId = params.emailId && !validFolders.includes(params.emailId) ? params.emailId : null
+    
+    // Check if we're on the compose route by checking the pathname
+    const isComposeOpen = location.pathname.endsWith('/compose')
+    
+    // Extract initial values from search params when on compose route
+    const composeInitialValues = isComposeOpen ? {
+        to: searchParams.get('to') || searchParams.get('from') || '',
+        subject: searchParams.get('subject') || '',
+        body: searchParams.get('body') || ''
+    } : {}
+    
+    // checks if an email is selected - and not folder/compose
+    const selectedMailId = params.emailId && !validFolders.includes(params.emailId) && params.emailId !== 'compose' ? params.emailId : null
     const [filterBy, setFilterBy] = useState(() => {
         const defaultFilter = emailService.getDefaultFilter(searchParams)
         return { ...defaultFilter, folder: currentFolder }
     })
     
-    // Redirect /mail to /mail/inbox if no folder in URL
+    // Redirect /mail to /mail/inbox if no folder in URL (but not if we're on compose route)
     useEffect(() => {
-        if (!params.folder && !params.emailId) {
+        if (!isComposeOpen && !params.folder && !params.emailId) {
             navigate('/mail/inbox', { replace: true })
         }
-    }, [params.folder, params.emailId, navigate])
+    }, [params.folder, params.emailId, navigate, isComposeOpen])
 
     useEffect(() => {
         emailService.countUnreadEmails().then(count => setUnreadCount(count))
@@ -54,7 +66,7 @@ export function MailIndex() {
     }, [searchParams, folderFromUrl])
 
     // Reload emails when navigating back from email details (when emailId becomes null)
-    const prevEmailIdRef = React.useRef(params.emailId)
+    const prevEmailIdRef = useRef(params.emailId)
     useEffect(() => {
         // Only reload if we navigated back (emailId went from a value to null/undefined)
         const hadEmailId = prevEmailIdRef.current && !validFolders.includes(prevEmailIdRef.current)
@@ -85,6 +97,12 @@ export function MailIndex() {
                 showErrorMsg('Failed to load emails')
             })
             .finally(() => setIsLoading(false))
+    }
+
+    function onSelectEmail(emailId) {
+        setEmails(emails => emails.map(email => 
+            email.id === emailId ? { ...email, isSelected: !email.isSelected } : email
+        ))
     }
 
     function onSetFilter(newFilterBy) {
@@ -195,11 +213,23 @@ export function MailIndex() {
         showSuccessMsg('Email snoozed')
     }
 
+    function handleCloseCompose() {
+        navigate(`/mail/${currentFolder}`) // Navigate back to current folder
+    }
+
     if (isLoading || !emails) return <div>Loading...</div>
 
     return (
         <section className="mail-index">
             <div className="mail-filter-container">
+                <button
+                    className="gmail-btn"
+                    onClick={() => navigate('/mail')}
+                    title="Gmail"
+                >
+                    <img className="gmail-icon" src="../../../assets/img/mail-imgs/gmail-icon.png" alt="Gmail" />
+                    Gmail
+                </button>
                 <MailFilter 
                     defaultFilter={filterBy} 
                     onSetFilter={onSetFilter} 
@@ -212,10 +242,10 @@ export function MailIndex() {
                         title="Compose"
                         className="compose-btn"
                         type="button"
-                        onClick={() => setIsComposeOpen(prev => !prev)}
+                        onClick={() => navigate(`/mail/${currentFolder}/compose`)}
                     >
                         <img src="../../../assets/img/mail-imgs/edit-pen.svg" alt="compose" />
-                        {isComposeOpen ? 'Close compose' : 'Compose'}
+                        Compose
                     </button>
                     <MailFolderList />
                 </div>
@@ -229,9 +259,10 @@ export function MailIndex() {
                             onArchiveEmail={onArchiveEmail}
                             onToggleReadStatus={onToggleReadStatus}
                             onSnoozeEmail={onSnoozeEmail}
-                            // onSelectEmail={onSelectEmail}
+                            onSelectEmail={onSelectEmail}
                             onStarEmail={onStarEmail}
                             onImportantEmail={onImportantEmail}
+                            currentFolder={currentFolder}
                         />
                     )}
                     <Outlet context={{ onUpdateUnreadCount }} />
@@ -239,21 +270,22 @@ export function MailIndex() {
             </div>
 
             {isComposeOpen && (
-                <div className="modal-overlay" onClick={() => setIsComposeOpen(false)}>
+                <div className="modal-overlay" onClick={handleCloseCompose}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <h4>New Message</h4>
                         <button 
                             className="modal-close-btn" 
-                            onClick={() => setIsComposeOpen(false)}
+                            onClick={handleCloseCompose}
                             aria-label="Close"
                         >
                             ×
                         </button>
                         <ComposeEmail
+                            initialValues={composeInitialValues}
                             onEmailAdded={(savedEmail) =>{
-                                setEmails(emails => [savedEmail, ...emails])
                                 onUpdateUnreadCount()
-                                setIsComposeOpen(false)
+                                navigate(`/mail/${currentFolder}`)
+                                loadEmails()
                             }}
                             onDraftSave={(draftData) => {
                                 emailService.saveDraft(draftData)
@@ -263,7 +295,7 @@ export function MailIndex() {
                                             if (currentFolder === 'draft') {
                                                 setEmails(emails => [savedDraft, ...emails])
                                             }
-                                            onUpdateUnreadCount
+                                            onUpdateUnreadCount()
                                         }
                                     })
                                     .catch(err => {

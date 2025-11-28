@@ -1,4 +1,4 @@
-import { loadFromStorage, makeId, saveToStorage, getRandomIntInclusive, randomTrueFalse, makeLorem } from '../../../services/util.service.js'
+import { loadFromStorage, makeId, saveToStorage, getRandomIntInclusive, randomTrueFalse, makeLorem, isToday, getTimeString } from '../../../services/util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
 
 const EMAIL_KEY = 'emailDB'
@@ -22,6 +22,7 @@ export const emailService = {
     getEmailCounts,
     moveToTrash,
     saveDraft,
+    getDateString,
 }
 
 function query(filterBy = {}) {
@@ -47,20 +48,6 @@ function query(filterBy = {}) {
                     regExp.test(email.body)
                 )
             }
-            // if (filterBy.listPrice) {
-            //     emails = emails.filter(email => email.listPrice.amount >= filterBy.listPrice)
-            // }
-            // if (filterBy.onSale) {
-            //     emails = emails.filter(email => email.listPrice.isOnSale === true)
-            // }
-            // if (filterBy.categories && filterBy.categories.length > 0) {
-            //     const filterCategoriesLower = filterBy.categories.map(cat => cat.toLowerCase())
-            //     emails = emails.filter(book => 
-            //         book.categories && book.categories.some(category => 
-            //             filterCategoriesLower.includes(category.toLowerCase())
-            //         )
-            //     )
-            // }
             return emails
         })
 }
@@ -109,6 +96,7 @@ function getEmptyEmail(subject, sentFrom = '', trueFalse = false) {
         folder: '',
         isStarred: false,
         isImportant: false,
+        isSelected: false,
     }
 }
 
@@ -197,13 +185,23 @@ function saveDraft(emailData) {
     if (!to && !subject && !body) {
         return Promise.resolve(null)
     }
-    
-    const draftEmail = emailService.getEmptyEmail(subject || '(no subject)', loggedinUser.email, true)
-    draftEmail.to = to || null
-    draftEmail.body = body || null
-    draftEmail.folder = 'draft'
-    draftEmail.sentAt = null // Drafts don't have a sentAt
-    return save(draftEmail)
+    return query({ folder: 'draft' })
+        .then(existingDrafts => {
+            const existingDraft = existingDrafts.find(draft => 
+                draft.to === (to || null) && 
+                draft.subject === (subject || '(no subject)') && 
+                draft.body === (body || null)
+            )
+            if (existingDraft) {    //if draft already exists, return null
+                return Promise.resolve(null)
+            }
+            const draftEmail = emailService.getEmptyEmail(subject || '(no subject)', loggedinUser.email, true)
+            draftEmail.to = to || null
+            draftEmail.body = body || null
+            draftEmail.folder = 'draft'
+            draftEmail.sentAt = Date.now()
+            return save(draftEmail)
+        })
 }
 
 function countUnreadEmails() {
@@ -276,4 +274,20 @@ function getEmailCounts() {
             archive: emails.filter(email => email.folder === 'archive').length,
         }
     })
+}
+
+function getDateString(date) {
+    if (isToday(date)) return getTimeString(date)
+    const currentYear = new Date().getFullYear()
+    const emailYear = date.getFullYear()
+    
+    if (emailYear === currentYear) {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        const month = monthNames[date.getMonth()]
+        const day = date.getDate()
+        return `${month} ${day}`
+    } else {
+        // Different year: show full date
+        return date.toLocaleDateString()
+    }
 }
