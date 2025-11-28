@@ -221,7 +221,7 @@ export function CreateNoteForm({ onCreate }) {
                 {note.type !== 'NoteImg' && !editMode && (
                     <React.Fragment>
                         <button
-                            className="note-btn round"
+                            className="note-btn round note-type-btn"
                             onClick={() => {
                                 setNote({
                                     ...note,
@@ -234,7 +234,7 @@ export function CreateNoteForm({ onCreate }) {
                         </button>
 
                         <button
-                            className="note-btn round"
+                            className="note-btn round note-type-btn"
                             onClick={() => {
                                 uploadFile()
                                 setEditMode(true)
@@ -243,7 +243,7 @@ export function CreateNoteForm({ onCreate }) {
                         </button>
 
                         <button
-                            className="note-btn round"
+                            className="note-btn round note-type-btn"
                             onClick={() => {
                                 setNote({
                                     ...note,

@@ -1,26 +1,51 @@
 header {
-    border-bottom: 2px solid white;
-    margin-left: 10px;
-    margin-right: 10px;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 0px inset, rgba(0, 0, 0, 0.07) 0px -1px 0px inset;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 200;
+
+    & .logo {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        box-sizing: border-box;
+        width: 232px;
+        padding: 0px 30px 0px 0px;
+
+        & img{
+            height: 2rem;
+            width: auto;
+            margin-bottom: -4px;
+        }
+    }
     
 }
 
 .app-header {
     display: flex;
-    justify-content: space-between;
-    padding: 20px 0;
-}
+    align-items: center;
+    padding: 8px;
 
-nav a {
-    margin: .5em;
-}
+    & .header-space {
+        flex: 1;
+    }
 
-nav a:active {
-    color: purple;
-}
+    & nav {
+        display: inline-flex;
+        align-items: center;
 
-nav a.active {
-    color: darkblue;
-    font-weight: bold;
-    text-decoration: overline;
+        & .note-btn {
+            color: #757575;
+
+            &:hover {
+                color: rgb(32, 33, 36);
+            }
+        }
+        & a.active .note-btn {
+            color: rgb(32, 33, 36);
+            background-color: #FEEFC3;
+        }
+    }
 }

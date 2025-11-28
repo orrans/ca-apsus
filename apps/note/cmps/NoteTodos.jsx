@@ -2,7 +2,7 @@ export function NoteTodos({ note, onUpdateTodo }) {
     const { info } = note
     return (
         <div className="note-todos">
-            <h4>{info.title}</h4>
+            {info.title && <h2>{info.title}</h2>}
             <ul>
                 {info.todos.map((todo, idx) => (
                     //change idx to elemnt id

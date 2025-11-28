@@ -1,0 +1,15 @@
+[data-title] {
+    position: relative;
+    &:hover::after {
+        display: block;
+        position: absolute;
+        content: attr(data-title);
+        background-color: black;
+        border-radius: 4px;
+        padding: 2px 4px;
+        color: white;
+        left: 50%;
+        top: calc(2lh + 5px);
+        transform: translateX(-50%);
+    }
+}

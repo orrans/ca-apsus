@@ -2,13 +2,13 @@ import { NotePreview } from './NotePreview.jsx'
 
 export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
     return (
-        <div>
-            <h2>Pinned</h2>
+        <div className="notes-container">
+            <h2 className="note-list-title">Pinned</h2>
             <ul className="note-list">
                 {notes
                     .filter((note) => note.isPinned)
                     .map((note) => (
-                        <li key={note.id}>
+                        <li className="note-list-item"  key={note.id}>
                             <NotePreview
                                 note={note}
                                 onRemove={onRemove}
@@ -20,12 +20,12 @@ export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote, onDuplic
                     ))}
             </ul>
 
-            <h2>Others</h2>
+            <h2 className="note-list-title">Others</h2>
             <ul className="note-list">
                 {notes
                     .filter((note) => !note.isPinned)
                     .map((note) => (
-                        <li key={note.id}>
+                        <li className="note-list-item" key={note.id}>
                             <NotePreview
                                 note={note}
                                 onRemove={onRemove}
