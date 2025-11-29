@@ -4,6 +4,7 @@
     margin: 0;
     column-gap: 10px;
     column-count: 1;
+    column-width: 240px;
     font-family: var(--font-roboto);
 
     & li {
