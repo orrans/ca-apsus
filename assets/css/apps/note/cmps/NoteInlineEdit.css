@@ -24,6 +24,7 @@
     & .form-title {
         font-size: 1.25rem;
         line-height: 1.25;
+        padding-bottom: 8px;
     }
 
     & .form-container {
@@ -60,6 +61,7 @@
 
     & .form-inputs {
         flex-grow: 1;
+        padding-bottom: 6px;
     }
 
     & .uploaded-img {
@@ -164,5 +166,17 @@
         transition: all 0.2s;
         opacity: 1;
         filter: drop-shadow(0 0 1px white) drop-shadow(0 0 1px white) drop-shadow(0 0 1px white);
+    }
+
+    & .note-labels {
+        padding: 12px 0;
+    }
+
+    & .close-form-btn {
+        color: #757575;
+
+        &:hover {
+            color: black;
+        }
     }
 }

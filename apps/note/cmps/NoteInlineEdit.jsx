@@ -1,6 +1,7 @@
 import { utilService } from '../../../services/util.service.js'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
 import { NoteLabelPicker } from './NoteLabelPicker.jsx'
+import { NoteLabels } from './NoteLabels.jsx'
 import { NoteVideo } from './NoteVideo.jsx'
 
 const { useState, useEffect, useRef } = React
@@ -178,7 +179,7 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                         )}
                     </div>
                 </div>
-
+                <NoteLabels className="note-labels-inline-note" labels={note.labels} limit={5} />
                 <div className="toolbar-container">
                     <NoteColorPicker
                         value={note.style.backgroundColor || ''}
