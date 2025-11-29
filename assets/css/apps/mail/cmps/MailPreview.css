@@ -68,7 +68,7 @@
         flex-shrink: 0;
 
         &:hover {
-            background-color: #EBEDF0;
+            background-color: #dbd7d7;
             cursor: pointer;
         }
     }
