@@ -22,7 +22,10 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
         <article className="note-preview" style={note.style} onClick={() => setEdit(true)}>
             <div
                 className="pinned"
-                onClick={() => onUpdateNote({ ...note, isPinned: !note.isPinned })}>
+                onClick={(event) => {
+                    event.stopPropagation()
+                    onUpdateNote({ ...note, isPinned: !note.isPinned })
+                }}>
                 <span
                     className={
                         (note.isPinned ? 'material-symbols-filled' : '') +
@@ -37,7 +40,12 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
             {note.type === 'NoteTodos' && <NoteTodos note={note} onUpdateTodo={onUpdateTodo} />}
             <NoteLabels labels={note.labels} limit={2} />
             <section className="actions">
-                <button className="note-btn round" onClick={() => onRemove(note.id)}>
+                <button
+                    className="note-btn round"
+                    onClick={(event) => {
+                        event.stopPropagation()
+                        onRemove(note.id)
+                    }}>
                     <span className="material-symbols-outlined">delete</span>
                 </button>
 
@@ -48,7 +56,12 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
                     }
                 />
 
-                <button className="note-btn round" onClick={() => onDuplicate(note)}>
+                <button
+                    className="note-btn round"
+                    onClick={(event) => {
+                        event.stopPropagation()
+                        onDuplicate(note)
+                    }}>
                     <span className="material-symbols-outlined">file_copy</span>
                 </button>
 

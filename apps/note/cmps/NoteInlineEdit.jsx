@@ -1,5 +1,6 @@
 import { utilService } from '../../../services/util.service.js'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
+import { NoteLabelPicker } from './NoteLabelPicker.jsx'
 import { NoteVideo } from './NoteVideo.jsx'
 
 const { useState, useEffect, useRef } = React
@@ -203,6 +204,12 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                         }}>
                         <span className="material-symbols-outlined">movie</span>
                     </button>
+
+                    <NoteLabelPicker
+                        value={note.labels}
+                        onChange={(labels) => setNote({ ...note, labels: labels })}
+                    />
+
                     <div className="space"></div>
                     <button
                         className={'close-form-btn note-btn'}
