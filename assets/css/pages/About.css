@@ -1,5 +1,5 @@
 /* about */
-.about {
+/* .about {
     margin: 2rem auto;
     max-width: 800px;
     padding: 2rem;
@@ -12,5 +12,44 @@
 .about p {
     margin-bottom: 1rem;
     line-height: 1.6;
-}
+} */
 
+.about {
+    padding: 40px 100px;
+    & .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+
+        & .about-card {
+            width: 260px;
+            padding: 24px 20px 30px;
+            text-align: center;
+            background-color: white;
+            border-radius: 18px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+                rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+            margin-top: 32px;
+
+            & .about-img {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                object-fit: cover;
+                display: block;
+                margin: 0 auto 16px;
+            }
+
+            & .about-name {
+                font-size: 1.2rem;
+                margin: 0 0 8px;
+            }
+
+            & .about-description {
+                color: #555;
+                font-size: 0.95rem;
+                line-height: 1.35;
+            }
+        }
+    }
+}
