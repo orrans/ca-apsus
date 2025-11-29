@@ -46,7 +46,7 @@ export function NoteIndex() {
         noteService
             //move only the sort to service
             .query()
-            .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
+            .then((notes) => setNotes(notes)) //.sort((a, b) => b.createdAt - a.createdAt)))
     }
 
     function searchNotes(search) {
@@ -58,6 +58,11 @@ export function NoteIndex() {
 
     function onCreateNote(note) {
         noteService.save(note).then((createdNote) => setNotes([createdNote, ...notes]))
+    }
+
+    function onUpdateNotes(notesArr) {
+        setNotes(notesArr)
+        noteService.saveAll(notesArr).then(() => setNotes(notesArr))
     }
 
     function updateTodo(note, idx, todo) {
@@ -129,7 +134,7 @@ export function NoteIndex() {
                 onUpdateTodo={updateTodo}
                 onUpdateNote={onUpdateNote}
                 onDuplicate={onDuplicateNote}
-                setNotes={setNotes}
+                onUpdateNotes={onUpdateNotes}
             />
         </section>
     )

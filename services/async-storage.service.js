@@ -3,26 +3,28 @@ export const storageService = {
     get,
     post,
     put,
+    putAll,
     remove,
 }
 
 function query(entityType, delay = 200) {
     var entities = JSON.parse(localStorage.getItem(entityType)) || []
-    return new Promise(resolve => setTimeout(() => resolve(entities), delay))
+    return new Promise((resolve) => setTimeout(() => resolve(entities), delay))
 }
 
 function get(entityType, entityId) {
-    return query(entityType).then(entities => {
-        const entity = entities.find(entity => entity.id === entityId)
-        if (!entity) throw new Error(`Get failed, cannot find entity with id: ${entityId} in: ${entityType}`)
+    return query(entityType).then((entities) => {
+        const entity = entities.find((entity) => entity.id === entityId)
+        if (!entity)
+            throw new Error(`Get failed, cannot find entity with id: ${entityId} in: ${entityType}`)
         return entity
     })
 }
 
 function post(entityType, newEntity) {
-    newEntity = {...newEntity}
+    newEntity = { ...newEntity }
     newEntity.id = _makeId()
-    return query(entityType).then(entities => {
+    return query(entityType).then((entities) => {
         entities.push(newEntity)
         _save(entityType, entities)
         return newEntity
@@ -30,19 +32,30 @@ function post(entityType, newEntity) {
 }
 
 function put(entityType, updatedEntity) {
-    return query(entityType).then(entities => {
-        const idx = entities.findIndex(entity => entity.id === updatedEntity.id)
-        if (idx < 0) throw new Error(`Update failed, cannot find entity with id: ${entityId} in: ${entityType}`)
+    return query(entityType).then((entities) => {
+        const idx = entities.findIndex((entity) => entity.id === updatedEntity.id)
+        if (idx < 0)
+            throw new Error(
+                `Update failed, cannot find entity with id: ${entityId} in: ${entityType}`
+            )
         entities.splice(idx, 1, updatedEntity)
         _save(entityType, entities)
         return updatedEntity
     })
 }
 
+function putAll(entityType, newArr) {
+    _save(entityType, newArr)
+    return Promise.resolve(newArr)
+}
+
 function remove(entityType, entityId) {
-    return query(entityType).then(entities => {
-        const idx = entities.findIndex(entity => entity.id === entityId)
-        if (idx < 0) throw new Error(`Remove failed, cannot find entity with id: ${entityId} in: ${entityType}`)
+    return query(entityType).then((entities) => {
+        const idx = entities.findIndex((entity) => entity.id === entityId)
+        if (idx < 0)
+            throw new Error(
+                `Remove failed, cannot find entity with id: ${entityId} in: ${entityType}`
+            )
         entities.splice(idx, 1)
         _save(entityType, entities)
     })

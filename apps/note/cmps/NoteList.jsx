@@ -1,23 +1,37 @@
 import { NotePreview } from './NotePreview.jsx'
 const { useState, useEffect } = React
 
-export function NoteList({ notes, setNotes, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
+export function NoteList({
+    notes,
+    onUpdateNotes,
+    onRemove,
+    onUpdateTodo,
+    onUpdateNote,
+    onDuplicate,
+}) {
     const [draggedIndex, setDraggedIndex] = useState(null)
 
-    const onDragStart = (idx) => {
+    const onDragStart = (note, idx) => {
         console.log('start idx', idx)
         setDraggedIndex(idx)
     }
 
-    const drop = (idx) => {
+    useEffect(() => {
+        console.log('changed', notes)
+    }, [notes])
+
+    const drop = (note, idx) => {
         console.log('drop', idx)
-        const newNotes = [...notes]
+        const pinnedNotes = [...notes.filter((currNote) => currNote.isPinned)]
+        const otherNotes = [...notes.filter((currNote) => !currNote.isPinned)]
+        const newNotes = note.isPinned ? pinnedNotes : otherNotes
+        const newOtherNotes = !note.isPinned ? pinnedNotes : otherNotes
         const [draggedItem] = newNotes.splice(draggedIndex, 1)
         newNotes.splice(idx, 0, draggedItem)
         console.log('new notes', newNotes)
         console.log('notes', notes)
 
-        setNotes(newNotes)
+        onUpdateNotes([...newNotes, ...newOtherNotes])
     }
 
     function allowDrop(event) {
@@ -35,8 +49,8 @@ export function NoteList({ notes, setNotes, onRemove, onUpdateTodo, onUpdateNote
                             draggable="true"
                             className="note-list-item"
                             key={note.id}
-                            onDragStart={() => onDragStart(idx)}
-                            onDrop={() => drop(idx)}
+                            onDragStart={() => onDragStart(note, idx)}
+                            onDrop={() => drop(note, idx)}
                             onDragOver={allowDrop}>
                             <NotePreview
                                 note={note}
@@ -53,8 +67,14 @@ export function NoteList({ notes, setNotes, onRemove, onUpdateTodo, onUpdateNote
             <ul className="note-list">
                 {notes
                     .filter((note) => !note.isPinned)
-                    .map((note) => (
-                        <li draggable="true" className="note-list-item" key={note.id}>
+                    .map((note, idx) => (
+                        <li
+                            draggable="true"
+                            className="note-list-item"
+                            key={note.id}
+                            onDragStart={() => onDragStart(note, idx)}
+                            onDrop={() => drop(note, idx)}
+                            onDragOver={allowDrop}>
                             <NotePreview
                                 note={note}
                                 onRemove={onRemove}
