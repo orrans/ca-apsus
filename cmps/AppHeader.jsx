@@ -1,8 +1,12 @@
 import { NoteSearchForm } from '../apps/note/cmps/NoteSearchForm.jsx'
+import { Sidebar } from './Sidebar.jsx'
 
 const { Link, NavLink, Routes, Route } = ReactRouterDOM
+const { useState } = React
 
 export function AppHeader() {
+    const [sidebarOpen, setSidebarOpen] = useState(false)
+
     return (
         <header>
             <div className="app-header">
@@ -44,7 +48,13 @@ export function AppHeader() {
                         </NavLink>
                     </nav>
                 </div>
+                <button
+                    className="note-btn round sidebar-btn"
+                    onClick={() => setSidebarOpen((prev) => !prev)}>
+                    <span className="material-symbols-outlined">dehaze</span>
+                </button>
             </div>
+            <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         </header>
     )
 }

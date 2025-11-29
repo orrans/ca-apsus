@@ -22,6 +22,7 @@ export function NoteIndex() {
             searchNotes(value)
         }
         function handleSearchActive(value) {
+            console.log('value', value)
             setSearchActive(value)
             if (value) setNotes([])
             else setFilterType(null)

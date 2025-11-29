@@ -5,6 +5,7 @@ const { useState, useEffect, useRef } = React
 export function NoteSearchForm({}) {
     const [search, setSearch] = useState('')
     const [filterType, setFilterType] = useState(null)
+    const [isActive, setIsActive] = useState(false)
 
     useEffect(() => {
         const removeSubscriber = eventBusService.on('setNoteFilterType', (type) =>
@@ -19,6 +20,8 @@ export function NoteSearchForm({}) {
     }
 
     function onSearchActiveChange(value) {
+        setIsActive(value)
+        console.log('insidesearchactive', value)
         eventBusService.emit('noteSearchActive', value)
         if (!value) {
             updateSearch('')
@@ -43,9 +46,11 @@ export function NoteSearchForm({}) {
             <div>
                 <button
                     className={`note-search-close-btn note-btn round ${
-                        search || filterType ? 'visible' : ''
+                        isActive || search || filterType ? 'visible' : ''
                     }`}
-                    onClick={() => onSearchActiveChange(false)}>
+                    onClick={() => {
+                        onSearchActiveChange(false)
+                    }}>
                     <span className="material-symbols-outlined">close</span>
                 </button>
             </div>
