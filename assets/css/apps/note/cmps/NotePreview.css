@@ -45,7 +45,9 @@
             break-inside: avoid;
 
             & input[type='checkbox'] {
-                margin: 0;
+                width: 16px;
+                height: 16px;
+                margin: 0px;
             }
         }
     }
@@ -76,6 +78,7 @@
 
 .actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
 
     & button,

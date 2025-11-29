@@ -105,11 +105,16 @@ export function NoteIndex() {
             })
     }
 
+    function updateFilterType(type) {
+        setFilterType(type)
+        eventBusService.emit('setNoteFilterType', type)
+    }
+
     if (searchActive)
         return (
             <div>
                 {!search && !filterType && (
-                    <NoteFilterType onFilterChange={(type) => setFilterType(type)} />
+                    <NoteFilterType onFilterChange={(type) => updateFilterType(type)} />
                 )}
                 {(search || filterType) && (
                     <NoteList

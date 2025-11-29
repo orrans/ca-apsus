@@ -4,6 +4,14 @@ const { useState, useEffect, useRef } = React
 
 export function NoteSearchForm({}) {
     const [search, setSearch] = useState('')
+    const [filterType, setFilterType] = useState(null)
+
+    useEffect(() => {
+        const removeSubscriber = eventBusService.on('setNoteFilterType', (type) =>
+            setFilterType(type)
+        )
+        return removeSubscriber
+    }, [])
 
     function updateSearch(value) {
         setSearch(value)
@@ -14,6 +22,8 @@ export function NoteSearchForm({}) {
         eventBusService.emit('noteSearchActive', value)
         if (!value) {
             updateSearch('')
+            eventBusService.emit('setNoteFilterType', null)
+            setFilterType(null)
         }
     }
 
@@ -32,7 +42,9 @@ export function NoteSearchForm({}) {
             />
             <div>
                 <button
-                    className="note-search-close-btn note-btn round"
+                    className={`note-search-close-btn note-btn round ${
+                        search || filterType ? 'visible' : ''
+                    }`}
                     onClick={() => onSearchActiveChange(false)}>
                     <span className="material-symbols-outlined">close</span>
                 </button>

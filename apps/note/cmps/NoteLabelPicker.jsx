@@ -79,7 +79,15 @@ export function NoteLabelPicker({ value = [], onChange }) {
 
             <LabelPopup open={isOpen} position={popupPos}>
                 <div className="label-list" onClick={(event) => event.stopPropagation()}>
-                    <input type="search" onInput={(event) => onSearchLabel(event.target.value)} />
+                    <span className="label-title-header">Label note</span>
+                    <div className="label-input-container">
+                        <input
+                            type="text"
+                            placeholder="Enter label name"
+                            onInput={(event) => onSearchLabel(event.target.value)}
+                        />
+                        <span className="material-symbols-outlined">search</span>
+                    </div>
                     <ul>
                         {labels.map((label) => (
                             <li className="label-row" key={label.id}>
@@ -99,8 +107,11 @@ export function NoteLabelPicker({ value = [], onChange }) {
                         !labels.some(
                             (label) => label.name.toLowerCase() === search.toLowerCase()
                         ) && (
-                            <div onClick={() => createLabel(search)}>
-                                <span class="material-symbols-outlined">add</span> Create '{search}'
+                            <div className="create-new-label" onClick={() => createLabel(search)}>
+                                <span class="material-symbols-outlined">add</span>{' '}
+                                <span className="create-new-label-txt">
+                                    Create '<b>{search}</b>'
+                                </span>
                             </div>
                         )}
                 </div>

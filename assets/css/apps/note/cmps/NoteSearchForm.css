@@ -11,14 +11,21 @@
 
     & .note-search-close-btn {
         opacity: 0;
+        pointer-events: none;
     }
 
     &:has(input:focus) {
         background-color: white;
         box-shadow: rgba(65, 69, 73, 0.3) 0px 1px 1px 0px, rgba(65, 69, 73, 0.15) 0px 1px 3px 1px;
         & .note-search-close-btn {
+            pointer-events: all;
             opacity: 1;
         }
+    }
+
+    & .note-search-close-btn.visible {
+        pointer-events: all;
+        opacity: 1;
     }
 
     & input {

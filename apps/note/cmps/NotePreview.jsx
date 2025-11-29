@@ -14,6 +14,10 @@ export function NotePreview({ note, onRemove, onUpdateTodo, onUpdateNote, onDupl
     const [edit, setEdit] = useState(false)
     const navigate = useNavigate()
 
+    useEffect(() => {
+        document.body.style.overflowY = edit ? 'hidden' : 'visible'
+    }, [edit])
+
     function shareToMail() {
         navigate(`/mail/inbox/compose?subject=${note.info.title || ''}&body=${note.info.txt || ''}`)
     }

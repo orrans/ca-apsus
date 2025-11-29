@@ -12,7 +12,7 @@ export function CreateNoteForm({ onCreate }) {
     const [editMode, setEditMode] = useState(false)
 
     useEffect(() => {
-        const search = window.location.search
+        const search = window.location.search || window.location.hash.split('?')[1]
         const params = Object.fromEntries(new URLSearchParams(search))
         if (params.title || params.body) {
             setEditMode(true)

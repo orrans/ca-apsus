@@ -4,21 +4,65 @@
 
 .label-popup {
     position: absolute;
+    border-radius: 2px;
+    min-width: 225px;
     background-color: white;
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
-    border-radius: 10px;
     z-index: 20;
+    padding: 11px 12px 6px;
+
+    & .label-title-header {
+        font-size: 14px;
+    }
+    & .label-input-container {
+        display: flex;
+        padding: 8px 0px;
+
+        & input[type='text'] {
+            flex: 1;
+            border: none;
+            font-size: 13px;
+            color: rgb(60, 64, 67);
+            padding: 2px;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    & .material-symbols-outlined {
+        font-size: 13px;
+        color: rgb(60, 64, 67);
+    }
+
+    & .create-new-label {
+        display: flex;
+        font-size: 13px;
+        align-items: center;
+        cursor: pointer;
+
+        & .create-new-label-txt {
+            padding-left: 7px;
+        }
+
+        & .material-symbols-outlined {
+            font-size: 18px;
+            color: #757575;
+        }
+    }
 
     & ul {
         list-style: none;
         padding: 0;
+        margin: 0;
 
         & li {
             display: flex;
             gap: 7px;
             align-items: center;
-            padding: 5px 10px 3px;
-            font-size: 11pt;
+            padding: 5px 0px 3px;
+            font-size: 13px;
 
             & input[type='checkbox'] {
                 margin: 0;
