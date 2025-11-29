@@ -19,16 +19,16 @@ export function MailIndex() {
     const navigate = useNavigate()
     const params = useParams()
 
-    // Get folder from params - could be in folder param or emailId param (if it's a folder name)
+    // get folder from params
     const folderFromUrl = params.folder || params.emailId
     const currentFolder = folderFromUrl || 'inbox'
     const validFolders = ['inbox', 'sent', 'trash', 'draft', 'starred', 'important', 'archive']
     const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
 
-    // Check if we're on the compose route by checking the pathname
+    // check if we're on the compose route by checking the pathname
     const isComposeOpen = location.pathname.endsWith('/compose')
 
-    // Extract initial values from search params when on compose route
+    // extract initial values from search params when on compose route
     const composeInitialValues = isComposeOpen ? {
         to: searchParams.get('to') || searchParams.get('from') || '',
         subject: searchParams.get('subject') || '',
@@ -42,7 +42,7 @@ export function MailIndex() {
         return { ...defaultFilter, folder: currentFolder }
     })
 
-    // Redirect /mail to /mail/inbox if no folder in URL (but not if we're on compose route)
+    // redirect /mail to /mail/inbox if no folder in url (but not if we're on compose route)
     useEffect(() => {
         if (!isComposeOpen && !params.folder && !params.emailId) {
             navigate('/mail/inbox', { replace: true })
@@ -54,7 +54,7 @@ export function MailIndex() {
         loadEmails()
     }, [filterBy])
 
-    // Sync filterBy when URL params change (folder or searchParams)
+    // sync filterBy when urlL params change
     useEffect(() => {
         const txtFromParams = searchParams.get('txt') || ''
         const newFolder = folderFromUrl || 'inbox'
@@ -65,12 +65,11 @@ export function MailIndex() {
             }
             return prevFilter
         })
-    }, [searchParams, folderFromUrl])
+    }, [folderFromUrl])
 
-    // Reload emails when navigating back from email details (when emailId becomes null)
+    // reload emails when navigating back from email details
     const prevEmailIdRef = useRef(params.emailId)
     useEffect(() => {
-        // Only reload if we navigated back (emailId went from a value to null/undefined)
         const hadEmailId = prevEmailIdRef.current && !validFolders.includes(prevEmailIdRef.current)
         const hasEmailId = params.emailId && !validFolders.includes(params.emailId)
 
@@ -113,7 +112,7 @@ export function MailIndex() {
 
     function onSetFilter(newFilterBy) {
         setFilterBy(filterBy => ({ ...filterBy, ...newFilterBy }))
-        // Update searchParams when filter is submitted
+        // update searchParams when filter is submitted
         const newSearchParams = new URLSearchParams()
         if (newFilterBy.txt) {
             newSearchParams.set('txt', newFilterBy.txt)
@@ -143,7 +142,7 @@ export function MailIndex() {
         emailService.readEmail(emailId)
             .then(() => {
                 emailService.countUnreadEmails().then(count => setUnreadCount(count))
-                // Navigate with current folder to maintain context
+                // navigate with current folder
                 navigate(`/mail/${currentFolder}/${emailId}`)
             })
             .catch(err => {
@@ -170,11 +169,10 @@ export function MailIndex() {
     }
 
     function onStarEmail(emailId) {
-        // Optimistically update UI immediately
+        // update UI immediately
         setEmails(emails => emails.map(email =>
             email.id === emailId ? { ...email, isStarred: !email.isStarred } : email
         ))
-        // Then save to database
         emailService.get(emailId)
             .then(email => {
                 email.isStarred = !email.isStarred
@@ -183,11 +181,9 @@ export function MailIndex() {
     }
 
     function onImportantEmail(emailId) {
-        // Optimistically update UI immediately
         setEmails(emails => emails.map(email =>
             email.id === emailId ? { ...email, isImportant: !email.isImportant } : email
         ))
-        // Then save to database
         emailService.get(emailId)
             .then(email => {
                 email.isImportant = !email.isImportant
@@ -215,7 +211,7 @@ export function MailIndex() {
     }
 
     function onSnoozeEmail(emailId) {
-        // For now, just show a message. Can be enhanced later with actual snooze functionality
+        // just show a message
         showSuccessMsg('Email snoozed')
     }
 
@@ -256,7 +252,7 @@ export function MailIndex() {
     }
 
     function handleCloseCompose() {
-        navigate(`/mail/${currentFolder}`) // Navigate back to current folder
+        navigate(`/mail/${currentFolder}`) // navigate back to current folder
     }
 
     if (isLoading || !emails) return <div>Loading...</div>
@@ -341,7 +337,6 @@ export function MailIndex() {
                                 emailService.saveDraft(draftData)
                                     .then(savedDraft => {
                                         if (savedDraft) {
-                                            // Only update emails list if we're currently viewing drafts folder
                                             if (currentFolder === 'draft') {
                                                 setEmails(emails => [savedDraft, ...emails])
                                             }

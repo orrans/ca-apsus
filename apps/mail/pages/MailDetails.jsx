@@ -15,14 +15,14 @@ export function MailDetails() {
     const { onUpdateUnreadCount } = useOutletContext()
     const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
     useEffect(() => {
-        // If emailId is actually a folder name (and we don't have a folder param), redirect
+        // if emailId is actually a folder name (and we don't have a folder param), redirect
         const isFolderName = emailId && validFolders.includes(emailId)
         if (isFolderName && !folder) {
             navigate(`/mail/${emailId}`, { replace: true }) //emailId is actually a folder name
             setIsLoading(false)
             return
         }
-        // If there's no emailId, don't try to load
+        // if there's no emailId, don't try to load
         if (!emailId || isFolderName) {
             setIsLoading(false)
             return
@@ -40,7 +40,7 @@ export function MailDetails() {
         emailService.get(emailId)
             .then(email => {
                 setEmail(email)
-                // Mark email as read if it's not already read
+                // mark email as read if it's not already read
                 if (!email.isRead) {
                     emailService.readEmail(emailId)
                         .then(() => {

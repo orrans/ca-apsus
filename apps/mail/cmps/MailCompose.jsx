@@ -13,7 +13,7 @@ export function ComposeEmail({ onEmailAdded, onClose, onDraftSave, initialValues
     const emailRef = React.useRef(newEmail)
     const wasSentRef = React.useRef(false)
 
-    // Sync state when initialValues change
+    // sync state when initialValues change
     useEffect(() => {
         if (initialValues.to || initialValues.subject || initialValues.body) {
             setNewEmail(prev => ({
@@ -24,12 +24,12 @@ export function ComposeEmail({ onEmailAdded, onClose, onDraftSave, initialValues
         }
     }, [initialValues.to, initialValues.subject, initialValues.body])
 
-    // Keep ref in sync with state
+    // keep ref in sync with state
     useEffect(() => {
         emailRef.current = newEmail
     }, [newEmail])
 
-    // Save draft when component unmounts (modal closes) if there's content and email wasn't sent
+    // save draft when component unmounts (modal closes) if there's content(and we didn't send)
     useEffect(() => {
         return () => {
             if (!wasSentRef.current) {
@@ -67,7 +67,7 @@ export function ComposeEmail({ onEmailAdded, onClose, onDraftSave, initialValues
             })
             .catch(err => {
                 console.log('err:', err)
-                wasSentRef.current = false // Reset flag if sending failed
+                wasSentRef.current = false
                 showErrorMsg('Failed to add email')
             })
     }
