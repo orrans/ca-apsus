@@ -226,9 +226,14 @@ export function MailIndex() {
                     setEmails(emails => emails.filter(email =>
                         !emailIds.includes(email.id)))
                 } else if (action === 'toggleRead') {
-                    setEmails(emails => emails.map(email =>
-                        emailIds.includes(email.id) ? { ...email, isRead: !email.isRead } : email
-                    ))
+                    setEmails(emails => {
+                        const selectedEmails = emails.filter(email => emailIds.includes(email.id))
+                        const allRead = selectedEmails.every(email => email.isRead)
+                        const targetReadState = allRead ? false : true
+                        return emails.map(email =>
+                            emailIds.includes(email.id) ? { ...email, isRead: targetReadState } : email
+                        )
+                    })
                 }
                 onUpdateUnreadCount()
 

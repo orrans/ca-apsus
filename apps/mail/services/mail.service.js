@@ -298,7 +298,7 @@ function bulkAction(emailIds, action) {
     switch (action) {
         case 'archive':
             return emailIds.reduce((promise, emailId) => 
-                promise.then(() =>  //after each resolved promise, get the email and archive it
+                promise.then(() =>  //after each resolved email, get the email and archive it
                     get(emailId).then(email => {
                         email.folder = 'archive'
                         return save(email)
@@ -310,14 +310,17 @@ function bulkAction(emailIds, action) {
                 promise.then(() => remove(emailId)), Promise.resolve()
             )
         case 'toggleRead':
-            return emailIds.reduce((promise, emailId) => 
-                promise.then(() => 
-                    get(emailId).then(email => {
-                        email.isRead = !email.isRead
-                        return save(email)
-                    })
-                ), Promise.resolve()
-            )
+            return Promise.all(emailIds.map(emailId => get(emailId)))
+                .then(emails => {
+                    const allRead = emails.every(email => email.isRead)
+                    const targetReadState = allRead ? false : true
+                    return emails.reduce((promise, email) => 
+                        promise.then(() => {
+                            email.isRead = targetReadState
+                            return save(email)
+                        }), Promise.resolve()
+                    )
+                })
         default:
             return Promise.reject(new Error(`Unknown bulk action: ${action}`))
     }
