@@ -1,5 +1,6 @@
-
-
-.container {
+/* Scoped container - only affects containers within book app */
+.book-index .container,
+.book-details .container,
+.book-edit .container {
     padding-inline: 5vw;
 }

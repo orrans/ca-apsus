@@ -1,0 +1,47 @@
+.mail-details-button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color:#444746;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 2em;
+    &:hover {
+        cursor: pointer;
+        background-color: transparent;
+    }
+    & a{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        color:#444746;
+        & img{
+            width: 20px;
+            height: 20px;
+        }
+    }
+    
+}
+.mail-details-navigation-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: baseline;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    gap: 0.5em;
+}
+
+.mail-details-actions-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}

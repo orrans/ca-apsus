@@ -16,7 +16,7 @@
     overflow: hidden;
 
     &.checked {
-        background-color: #c6e2ff;
+        background-color: #D3E3FD;
 
         &:hover {
             background-color: #c6e2ff;
@@ -25,7 +25,7 @@
 
     &:hover {
         cursor: pointer;
-        background-color: #f8f9fa;
+        background-color: #EBEDF0;
         box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
     }
 
@@ -68,7 +68,7 @@
         flex-shrink: 0;
 
         &:hover {
-            background-color: rgba(95, 99, 104, 0.2);
+            background-color: #EBEDF0;
             cursor: pointer;
         }
     }
@@ -82,7 +82,7 @@
     right: 16px;
     opacity: 0;
     transition: opacity 0.1s ease;
-    background: white;
+    background: #EBEDF0;
     padding-left: 16px;
 }
 
@@ -99,8 +99,8 @@
 }
 
 .email-list-item button>img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     display: block;
     object-fit: contain;
 }
@@ -118,17 +118,19 @@
 }
 
 .preview-subject {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: inherit;
     color: inherit;
+    
 }
 
 .preview-body {
-    flex: 1 2 auto;
+    flex: 1 2 0;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -138,8 +140,8 @@
 }
 
 .preview-date {
-    min-width: 40px;
-    width: auto;
+    min-width: 80px;
+    width: 80px;
     text-align: right;
     font-size: 0.8125rem;
     color: #5f6368;
