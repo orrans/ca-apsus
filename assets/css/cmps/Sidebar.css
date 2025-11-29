@@ -22,5 +22,9 @@
         height: 48px;
         gap: 32px;
         align-items: center;
+
+        &.active {
+            background-color: rgb(254, 239, 195);
+        }
     }
 }

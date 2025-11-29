@@ -29,6 +29,9 @@ function query(filterBy = {}) {
         if (filterBy.type) {
             notes = notes.filter((note) => note.type === filterBy.type)
         }
+        if (filterBy.label) {
+            notes = notes.filter((note) => note.labels.some((label) => label.id === filterBy.label))
+        }
 
         return notes
     })

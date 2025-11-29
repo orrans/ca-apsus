@@ -3,6 +3,7 @@ import { NoteList } from '../cmps/NoteList.jsx'
 import { CreateNoteForm } from '../cmps/CreateNoteForm.jsx'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import { NoteFilterType } from '../cmps/NoteFilterType.jsx'
+import { LabelsSidebar } from '../cmps/LabelsSidebar.jsx'
 
 const { useState, useEffect } = React
 
@@ -11,6 +12,7 @@ export function NoteIndex() {
     const [search, setSearch] = useState('')
     const [filterType, setFilterType] = useState(null)
     const [searchActive, setSearchActive] = useState(false)
+    const [labelFilter, setLabelFilter] = useState(null)
 
     useEffect(() => {
         loadNotes()
@@ -43,6 +45,10 @@ export function NoteIndex() {
         searchNotes(search)
     }, [filterType])
 
+    useEffect(() => {
+        searchNotes(search)
+    }, [labelFilter])
+
     function loadNotes() {
         noteService
             //move only the sort to service
@@ -53,7 +59,7 @@ export function NoteIndex() {
     function searchNotes(search) {
         noteService
             //move only the sort to service
-            .query({ txt: search, type: filterType })
+            .query({ txt: search, type: filterType, label: labelFilter })
             .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
     }
 
@@ -106,6 +112,10 @@ export function NoteIndex() {
             })
     }
 
+    function labeChange(label) {
+        setLabelFilter(label)
+    }
+
     function updateFilterType(type) {
         setFilterType(type)
         eventBusService.emit('setNoteFilterType', type)
@@ -141,6 +151,10 @@ export function NoteIndex() {
                 onUpdateNote={onUpdateNote}
                 onDuplicate={onDuplicateNote}
                 onUpdateNotes={onUpdateNotes}
+            />
+            <LabelsSidebar
+                label={labelFilter}
+                onFilter={(label) => labeChange(label ? label.id : null)}
             />
         </section>
     )

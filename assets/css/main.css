@@ -26,6 +26,7 @@
 @import './apps/note/cmps/NoteInlineEdit.css';
 @import './apps/note/cmps/NoteLabelPicker.css';
 @import './apps/note/cmps/NoteLabels.css';
+@import './apps/note/cmps/LabelsSidebar.css';
 
 /* @import './apps/mail/pages/MailIndex.css'; */
 @import './apps/mail/pages/MailIndex.css';
