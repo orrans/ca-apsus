@@ -4,7 +4,7 @@ import { storageService } from '../../../services/async-storage.service.js'
 const EMAIL_KEY = 'emailDB'
 const loggedinUser = { email: 'user@appsus.com', fullname: 'Mahatma Appsus' }
 
-let gUsedEmailIds = new Set()
+let gUsedEmailIds = new Set()   //to check unique ids
 _initUsedEmailIds()
 _createEmails()
 
@@ -31,13 +31,13 @@ function query(filterBy = {}) {
     return storageService.query(EMAIL_KEY)
         .then(emails => {
             if (folder) {
-                // Handle special folders: starred and important
+                // handle special folders: starred and important
                 if (folder === 'starred') {
                     emails = emails.filter(email => email.isStarred === true)
                 } else if (folder === 'important') {
                     emails = emails.filter(email => email.isImportant === true)
                 } else {
-                    // Regular folder filtering
+                    // regular folder filtering
                     emails = emails.filter(email => email.folder === folder)
                 }
             }
@@ -123,7 +123,7 @@ function getDefaultFilter(searchParams) {
     }
 }
 
-function _initUsedEmailIds() {   //used to initialize the globalused book ids var
+function _initUsedEmailIds() {   //used to initialize the gUsedEmailIds book ids var
     const emails = loadFromStorage(EMAIL_KEY)
     if (emails && emails.length) {
         emails.forEach(email => {

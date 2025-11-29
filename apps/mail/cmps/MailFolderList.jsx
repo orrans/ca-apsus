@@ -15,13 +15,10 @@ export function MailFolderList() {
         emailService.getEmailCounts().then(counts => setEmailCounts(counts))
             .catch(err => console.log('err:', err))
     }
-
-    // Load counts on mount
     useEffect(() => {
         loadEmailCounts()
+        
     }, [])
-    
-    // Refresh counts when folder changes (like sent/trash work)
     useEffect(() => {
         loadEmailCounts()
     }, [params.folder, params.emailId, emailCounts])

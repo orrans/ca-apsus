@@ -35,14 +35,15 @@ export function About() {
                 </div>
 
                 <div className="about-card">
-                    <img className="about-img" src="./assets/img/orran.png" alt="Profile" />
+                    <img className="about-img" src="./assets/img/ran.jpeg" alt="Profile" />
 
-                    <h2 className="about-name">Or-Ran Bachar</h2>
+                    <h2 className="about-name">Ran Hirschorn</h2>
 
                     <p className="about-description">
-                        Chief keeper of sticky notes, breaker of layouts, professional bug creator,
-                        occasional bug fixer, and architect of DOM chaos that makes Prettier drink
-                        coffee.
+                        They said "build a Gmail clone for practice" -
+                        I said "how hard could it be?" (Narrator: It was hard.) 
+                        HI, I'm Ran Hirschoorn, now a humbled developer who respects email developers way more than before. 
+                        Send sympathy... or bug reports.
                     </p>
                 </div>
             </div>

@@ -8,7 +8,7 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
     const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
 
     function handleEmailClick(e) {
-        // Don't navigate if clicking on checkbox or buttons
+        // don't navigate if clicking on checkbox or buttons
         if (e.target.type === 'checkbox' || e.target.closest('.preview-left-buttons')) {
             e.preventDefault()
             return
@@ -54,21 +54,21 @@ export function EmailPreview({ email, onRemoveEmail, onReadEmail, onArchiveEmail
                         <img src={`${basePath}/assets/img/mail-imgs/${importantIcon}.svg`} alt="Important" />
                     </button>
                 </div>
-                {/* Part 1: From */}
+                {/* part 1: from */}
                 <div className="preview-from">
                     {email.from}
                 </div>
-                {/* Part 2: Subject */}
+                {/* part 2: subject */}
                 <div className="preview-subject">
                     {email.subject || '(no subject)'}
                 </div>
-                {/* Part 3: Body Preview */}
+                {/* part 3: body Preview */}
                 {email.body && (
                     <div className="preview-body">
                         -{email.body}
                     </div>
                 )}
-                {/* Part 4: Date */}
+                {/* part 4: date */}
                 <div className="preview-date">
                     {emailService.getDateString(sentAt)}
                 </div>

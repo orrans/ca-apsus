@@ -7,20 +7,9 @@ export function MailFilter({ defaultFilter, onSetFilter }) {
     const [filterByToEdit, setFilterByToEdit] = useState({ ...defaultFilter })
     const [availableCategories, setAvailableCategories] = useState([])
 
-    // useEffect(() => {
-    //     emailService.getAllCategories()
-    //         .then(categories => setAvailableCategories(categories))
-    //         .catch(err => console.log('err:', err))
-    // }, [])
-
     function handleChange({ target }) {
         const field = target.name
         let value = target.value
-
-        // if (field === 'categories') {
-        //     // For select, value is a single category string or empty string
-        //     value = value ? [value] : []
-
 
         switch (target.type) {
             case 'text':
@@ -34,8 +23,6 @@ export function MailFilter({ defaultFilter, onSetFilter }) {
         e.preventDefault()
         onSetFilter(filterByToEdit)
     }
-
-
 
     const { txt = '' } = filterByToEdit
     return (
