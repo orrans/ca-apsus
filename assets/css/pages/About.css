@@ -1,15 +1,16 @@
-/* home */
-.home {
+/* about */
+.about {
     margin: 2rem auto;
     max-width: 800px;
     padding: 2rem;
 }
 
-.home h1 {
+.about h1 {
     margin-bottom: 1.5rem;
 }
 
-.home p {
+.about p {
     margin-bottom: 1rem;
     line-height: 1.6;
 }
+
