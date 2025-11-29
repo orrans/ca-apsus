@@ -38,7 +38,10 @@ export function NoteInlineEdit({ onUpdate, note: noteProp, onClose }) {
                 onUpdate(note)
                 onClose()
             }}>
-            <div className="edit-form" onClick={(event) => event.stopPropagation()}>
+            <div
+                className="edit-form"
+                onClick={(event) => event.stopPropagation()}
+                style={{ backgroundColor: note.style.backgroundColor }}>
                 <div
                     className="pinned"
                     onClick={() => setNote({ ...note, isPinned: !note.isPinned })}>

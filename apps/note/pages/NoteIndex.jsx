@@ -129,6 +129,7 @@ export function NoteIndex() {
                 onUpdateTodo={updateTodo}
                 onUpdateNote={onUpdateNote}
                 onDuplicate={onDuplicateNote}
+                setNotes={setNotes}
             />
         </section>
     )

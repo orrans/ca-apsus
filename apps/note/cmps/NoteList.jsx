@@ -1,14 +1,43 @@
 import { NotePreview } from './NotePreview.jsx'
+const { useState, useEffect } = React
 
-export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
+export function NoteList({ notes, setNotes, onRemove, onUpdateTodo, onUpdateNote, onDuplicate }) {
+    const [draggedIndex, setDraggedIndex] = useState(null)
+
+    const onDragStart = (idx) => {
+        console.log('start idx', idx)
+        setDraggedIndex(idx)
+    }
+
+    const drop = (idx) => {
+        console.log('drop', idx)
+        const newNotes = [...notes]
+        const [draggedItem] = newNotes.splice(draggedIndex, 1)
+        newNotes.splice(idx, 0, draggedItem)
+        console.log('new notes', newNotes)
+        console.log('notes', notes)
+
+        setNotes(newNotes)
+    }
+
+    function allowDrop(event) {
+        event.preventDefault()
+    }
+
     return (
         <div className="notes-container">
             <h2 className="note-list-title">Pinned</h2>
             <ul className="note-list">
                 {notes
                     .filter((note) => note.isPinned)
-                    .map((note) => (
-                        <li className="note-list-item"  key={note.id}>
+                    .map((note, idx) => (
+                        <li
+                            draggable="true"
+                            className="note-list-item"
+                            key={note.id}
+                            onDragStart={() => onDragStart(idx)}
+                            onDrop={() => drop(idx)}
+                            onDragOver={allowDrop}>
                             <NotePreview
                                 note={note}
                                 onRemove={onRemove}
@@ -25,7 +54,7 @@ export function NoteList({ notes, onRemove, onUpdateTodo, onUpdateNote, onDuplic
                 {notes
                     .filter((note) => !note.isPinned)
                     .map((note) => (
-                        <li className="note-list-item" key={note.id}>
+                        <li draggable="true" className="note-list-item" key={note.id}>
                             <NotePreview
                                 note={note}
                                 onRemove={onRemove}

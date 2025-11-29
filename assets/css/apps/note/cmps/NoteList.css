@@ -5,6 +5,12 @@
     column-gap: 10px;
     column-count: 1;
     font-family: var(--font-roboto);
+
+    & li {
+        break-inside: avoid;
+        margin-bottom: 15px;
+        position: relative;
+    }
 }
 
 .notes-container {

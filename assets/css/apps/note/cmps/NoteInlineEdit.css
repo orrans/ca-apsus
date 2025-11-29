@@ -3,9 +3,9 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 200;
     inset: 0;
     background-color: rgba(32, 33, 36, 0.6);
+    z-index: 10;
 }
 
 .edit-form {
@@ -19,6 +19,7 @@
     width: calc(100vw - 100px);
     max-width: 600px;
     margin: 0 auto;
+    z-index: 15;
 
     & .form-title {
         font-size: 1.25rem;
@@ -35,6 +36,7 @@
     & input[type='text'] {
         width: 100%;
         border: none;
+        background-color: transparent;
 
         &:focus {
             outline: 0;
@@ -47,6 +49,7 @@
         width: 100%;
         gap: 10px;
         align-items: center;
+
         input[type='text'] {
             flex-grow: 1;
             &.checked {
@@ -137,9 +140,14 @@
         & .note-btn.round {
             width: 32px;
             height: 32px;
+            color: #757575;
 
             & .material-symbols-outlined {
                 font-size: 16px;
+            }
+
+            &:hover {
+                color: black;
             }
         }
     }
@@ -155,7 +163,6 @@
         cursor: pointer;
         transition: all 0.2s;
         opacity: 1;
-        z-index: 1;
         filter: drop-shadow(0 0 1px white) drop-shadow(0 0 1px white) drop-shadow(0 0 1px white);
     }
 }
