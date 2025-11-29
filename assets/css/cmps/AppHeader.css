@@ -32,7 +32,7 @@ header {
     }
 
     & nav {
-        display: inline-flex;
+        display: none;
         align-items: center;
 
         & .note-btn {
@@ -49,13 +49,33 @@ header {
     }
 }
 
+@media (max-width: 600px) {
+    header {
+        & .logo {
+            & img {
+                height: 1rem;
+            }
+        }
+    }
+}
+
 @media (min-width: 600px) {
     .note-list {
         column-count: 2;
     }
 
-    .notes-container {
-        padding: 0 20px;
+    .app-header {
+        & nav {
+            display: inline-flex;
+        }
+
+        & .sidebar-btn {
+            display: none;
+        }
+
+        & .notes-container {
+            padding: 0 20px;
+        }
     }
 }
 

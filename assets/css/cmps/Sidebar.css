@@ -1,0 +1,26 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 64px;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    max-width: 280px;
+    width: 100%;
+    transform: translateX(100%);
+    transition: all 0.3s ease-in-out;
+
+    &.open {
+        transform: translateX(0%);
+    }
+
+    & a {
+        display: flex;
+        padding: 0px 32px;
+        height: 48px;
+        gap: 32px;
+        align-items: center;
+    }
+}

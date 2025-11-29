@@ -32,6 +32,7 @@
 
 @import './cmps/UserMsg.css';
 @import './cmps/AppHeader.css';
+@import './cmps/Sidebar.css';
 
 /*email app*/
 @import './apps/mail/cmps/MailList.css';
