@@ -13,7 +13,7 @@ export function MailDetails() {
     const navigate = useNavigate()
     const currentFolder = validFolders.includes(folder) ? folder : 'inbox'
     const { onUpdateUnreadCount } = useOutletContext()
-    
+    const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
     useEffect(() => {
         // If emailId is actually a folder name (and we don't have a folder param), redirect
         const isFolderName = emailId && validFolders.includes(emailId)
@@ -29,6 +29,10 @@ export function MailDetails() {
         }
         loadEmail()
     }, [emailId, folder, navigate])
+
+    function SendToKeep() {
+        navigate(`/note?title=${email.subject || ''}&body=${email.body || ''}`)
+    }
 
 
     function loadEmail() {
@@ -67,11 +71,17 @@ export function MailDetails() {
             <h1>Subject: {subject}</h1>
             <p>{body}</p>
             <p>Sent at: {new Date(sentAt).toLocaleString()}</p>
-            <section>
-                <button ><Link to={`/mail/${currentFolder}/${email.prevEmailId}`}>Prev Email</Link></button>
-                <button ><Link to={`/mail/${currentFolder}/${email.nextEmailId}`}>Next Email</Link></button>
+            <section className="mail-details-navigation-container">
+                <button className="mail-details-button"><Link to={`/mail/${currentFolder}/${email.prevEmailId}`}>
+                <img src={`${basePath}/assets/img/mail-imgs/turn_left.svg`} alt="Previous Email" />Prev Email</Link>
+                </button>
+                <button  className="mail-details-button"><Link to={`/mail/${currentFolder}/${email.nextEmailId}`}>
+                Next Email<img src={`${basePath}/assets/img/mail-imgs/turn_right.svg`} alt="Next Email" /></Link></button>
             </section>
-            <button onClick={onBack}>Back</button>
+            <section className="mail-details-actions-container">
+                <button className="mail-details-button" onClick={onBack}>Back</button>
+                <button className="mail-details-button" onClick={SendToKeep}>Send to Keep</button>
+            </section>
         </section>
     )
 }

@@ -4,43 +4,44 @@ import { ComposeEmail } from '../cmps/MailCompose.jsx'
 import { showSuccessMsg, showErrorMsg, eventBusService } from '../../../services/event-bus.service.js'
 import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
+import { MailCheckbox } from '../cmps/MailCheckbox.jsx'
 
-const { useState, useEffect ,useRef} = React
+const { useState, useEffect, useRef } = React
 const { useNavigate, useSearchParams, useParams, useLocation, Outlet } = ReactRouterDOM
 
 export function MailIndex() {
     const [emails, setEmails] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
-    
+
     const location = useLocation()
     const [searchParams, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
     const params = useParams()
-    
+
     // Get folder from params - could be in folder param or emailId param (if it's a folder name)
     const folderFromUrl = params.folder || params.emailId
     const currentFolder = folderFromUrl || 'inbox'
     const validFolders = ['inbox', 'sent', 'trash', 'draft', 'starred', 'important', 'archive']
     const basePath = window.location.hostname === 'orrans.github.io' ? '/ca-apsus' : ''
-    
+
     // Check if we're on the compose route by checking the pathname
     const isComposeOpen = location.pathname.endsWith('/compose')
-    
+
     // Extract initial values from search params when on compose route
     const composeInitialValues = isComposeOpen ? {
         to: searchParams.get('to') || searchParams.get('from') || '',
         subject: searchParams.get('subject') || '',
         body: searchParams.get('body') || ''
     } : {}
-    
+
     // checks if an email is selected - and not folder/compose
     const selectedMailId = params.emailId && !validFolders.includes(params.emailId) && params.emailId !== 'compose' ? params.emailId : null
     const [filterBy, setFilterBy] = useState(() => {
         const defaultFilter = emailService.getDefaultFilter(searchParams)
         return { ...defaultFilter, folder: currentFolder }
     })
-    
+
     // Redirect /mail to /mail/inbox if no folder in URL (but not if we're on compose route)
     useEffect(() => {
         if (!isComposeOpen && !params.folder && !params.emailId) {
@@ -72,7 +73,7 @@ export function MailIndex() {
         // Only reload if we navigated back (emailId went from a value to null/undefined)
         const hadEmailId = prevEmailIdRef.current && !validFolders.includes(prevEmailIdRef.current)
         const hasEmailId = params.emailId && !validFolders.includes(params.emailId)
-        
+
         if (hadEmailId && !hasEmailId) {
             loadEmails()
         }
@@ -81,7 +82,7 @@ export function MailIndex() {
 
     useEffect(() => {   //update unread count when emails change
         if (!emails) return
-        emailService.countUnreadEmails().then(count => setUnreadCount(count))   
+        emailService.countUnreadEmails().then(count => setUnreadCount(count))
     }, [emails])
 
 
@@ -101,9 +102,13 @@ export function MailIndex() {
     }
 
     function onSelectEmail(emailId) {
-        setEmails(emails => emails.map(email => 
+        setEmails(emails => emails.map(email =>
             email.id === emailId ? { ...email, isSelected: !email.isSelected } : email
         ))
+    }
+
+    function onSelectAllEmails(selectAll) {
+        setEmails(emails => emails.map(email => ({ ...email, isSelected: selectAll })))
     }
 
     function onSetFilter(newFilterBy) {
@@ -166,7 +171,7 @@ export function MailIndex() {
 
     function onStarEmail(emailId) {
         // Optimistically update UI immediately
-        setEmails(emails => emails.map(email => 
+        setEmails(emails => emails.map(email =>
             email.id === emailId ? { ...email, isStarred: !email.isStarred } : email
         ))
         // Then save to database
@@ -179,7 +184,7 @@ export function MailIndex() {
 
     function onImportantEmail(emailId) {
         // Optimistically update UI immediately
-        setEmails(emails => emails.map(email => 
+        setEmails(emails => emails.map(email =>
             email.id === emailId ? { ...email, isImportant: !email.isImportant } : email
         ))
         // Then save to database
@@ -197,7 +202,7 @@ export function MailIndex() {
                 return emailService.save(email)
             })
             .then(() => {
-                setEmails(emails => emails.map(email => 
+                setEmails(emails => emails.map(email =>
                     email.id === emailId ? { ...email, isRead: !email.isRead } : email
                 ))
                 onUpdateUnreadCount()
@@ -214,6 +219,42 @@ export function MailIndex() {
         showSuccessMsg('Email snoozed')
     }
 
+    function onBulkAction(emailIds, action) {
+        emailService.bulkAction(emailIds, action)
+            .then(() => {
+                if (action === 'delete' || action === 'archive') {
+                    setEmails(emails => emails.filter(email =>
+                        !emailIds.includes(email.id)))
+                } else if (action === 'toggleRead') {
+                    setEmails(emails => {
+                        const selectedEmails = emails.filter(email => emailIds.includes(email.id))
+                        const allRead = selectedEmails.every(email => email.isRead)
+                        const targetReadState = allRead ? false : true
+                        return emails.map(email =>
+                            emailIds.includes(email.id) ? { ...email, isRead: targetReadState } : email
+                        )
+                    })
+                }
+                onUpdateUnreadCount()
+
+                const actionMessages = {
+                    archive: 'archived',
+                    delete: 'deleted',
+                    toggleRead: 'status updated'
+                }
+                showSuccessMsg(`${emailIds.length} email(s) ${actionMessages[action]}`)
+            })
+            .catch(err => {
+                console.log('err:', err)
+                const errorMessages = {
+                    archive: 'Failed to archive emails',
+                    delete: 'Failed to delete emails',
+                    toggleRead: 'Failed to update email status'
+                }
+                showErrorMsg(errorMessages[action] || 'Failed to perform action')
+            })
+    }
+
     function handleCloseCompose() {
         navigate(`/mail/${currentFolder}`) // Navigate back to current folder
     }
@@ -223,6 +264,7 @@ export function MailIndex() {
     return (
         <section className="mail-index">
             <div className="mail-filter-container">
+
                 <button
                     className="gmail-btn"
                     onClick={() => navigate('/mail')}
@@ -231,12 +273,12 @@ export function MailIndex() {
                     <img className="gmail-icon" src={`${basePath}/assets/img/mail-imgs/gmail-icon.png`} alt="Gmail" />
                     Gmail
                 </button>
-                <MailFilter 
-                    defaultFilter={filterBy} 
-                    onSetFilter={onSetFilter} 
+                <MailFilter
+                    defaultFilter={filterBy}
+                    onSetFilter={onSetFilter}
                 />
             </div>
-            
+
             <div className="mail-layout">
                 <div className="mail-sidebar">
                     <button
@@ -250,21 +292,28 @@ export function MailIndex() {
                     </button>
                     <MailFolderList />
                 </div>
-                
+
                 <div className="mail-content">
                     {!selectedMailId && (
-                        <EmailList
-                            emails={emails}
-                            onRemoveEmail={onRemoveEmail}
-                            onReadEmail={onReadEmail}
-                            onArchiveEmail={onArchiveEmail}
-                            onToggleReadStatus={onToggleReadStatus}
-                            onSnoozeEmail={onSnoozeEmail}
-                            onSelectEmail={onSelectEmail}
-                            onStarEmail={onStarEmail}
-                            onImportantEmail={onImportantEmail}
-                            currentFolder={currentFolder}
-                        />
+                        <React.Fragment>
+                            <MailCheckbox
+                                emails={emails}
+                                onBulkAction={onBulkAction}
+                                onSelectAllEmails={onSelectAllEmails}
+                            />
+                            <EmailList
+                                emails={emails}
+                                onRemoveEmail={onRemoveEmail}
+                                onReadEmail={onReadEmail}
+                                onArchiveEmail={onArchiveEmail}
+                                onToggleReadStatus={onToggleReadStatus}
+                                onSnoozeEmail={onSnoozeEmail}
+                                onSelectEmail={onSelectEmail}
+                                onStarEmail={onStarEmail}
+                                onImportantEmail={onImportantEmail}
+                                currentFolder={currentFolder}
+                            />
+                        </React.Fragment>
                     )}
                     <Outlet context={{ onUpdateUnreadCount }} />
                 </div>
@@ -274,8 +323,8 @@ export function MailIndex() {
                 <div className="modal-overlay" onClick={handleCloseCompose}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <h4>New Message</h4>
-                        <button 
-                            className="modal-close-btn" 
+                        <button
+                            className="modal-close-btn"
                             onClick={handleCloseCompose}
                             aria-label="Close"
                         >
@@ -283,7 +332,7 @@ export function MailIndex() {
                         </button>
                         <ComposeEmail
                             initialValues={composeInitialValues}
-                            onEmailAdded={(savedEmail) =>{
+                            onEmailAdded={(savedEmail) => {
                                 onUpdateUnreadCount()
                                 navigate(`/mail/${currentFolder}`)
                                 loadEmails()

@@ -133,8 +133,9 @@
     color: #ffd700;
 }
 
-/* Modal styles */
-.modal-overlay {
+/* Modal styles - scoped to book app only */
+.book-details .modal-overlay,
+.book-edit .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -147,7 +148,8 @@
     z-index: 1000;
 }
 
-.modal-content {
+.book-details .modal-content,
+.book-edit .modal-content {
     background-color: #9bd07e;
     border-radius: 8px;
     padding: 2em;
