@@ -24,10 +24,6 @@
         }
     }
 
-    & .form-title {
-        font-size: 1.25rem;
-        line-height: 1.25;
-    }
     & .form-container {
         display: flex;
         align-items: center;
@@ -37,13 +33,21 @@
     & input[type='text'] {
         width: 100%;
         border: none;
+        color: rgb(32, 33, 36);
         background-color: transparent;
-        font-size: 15px;
+        font-size: 14.66px;
         font-family: var(--font-roboto);
 
         &:focus {
             outline: 0;
         }
+    }
+
+    & input[type='text'].form-title {
+        font-family: var(--font-google-sans);
+        color: rgb(32, 33, 36);
+        font-size: 1.25rem;
+        line-height: 1.25;
     }
 
     & .input-row {

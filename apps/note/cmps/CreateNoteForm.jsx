@@ -1,6 +1,8 @@
 import { utilService } from '../../../services/util.service.js'
 import { noteService } from '../services/note.service.js'
 import { NoteColorPicker } from './NoteColorPicker.jsx'
+import { NoteLabelPicker } from './NoteLabelPicker.jsx'
+import { NoteLabels } from './NoteLabels.jsx'
 
 // /email/compose? title=my note & body= note about the rain
 
@@ -30,7 +32,7 @@ export function CreateNoteForm({ onCreate }) {
 
             if (formContainer && formContainer.contains(clickedElement)) return
 
-            if (event.target.closest('.color-popup')) {
+            if (event.target.closest('.color-popup') || event.target.closest('.label-popup')) {
                 return
             }
 
@@ -259,27 +261,34 @@ export function CreateNoteForm({ onCreate }) {
             </div>
 
             {editMode && (
-                <div className="toolbar-container">
-                    <NoteColorPicker
-                        value={note.style.backgroundColor || ''}
-                        onChange={(color) =>
-                            setNote({ ...note, style: { backgroundColor: color } })
-                        }
-                    />
+                <React.Fragment>
+                    <NoteLabels labels={note.labels} limit={5} />
+                    <div className="toolbar-container">
+                        <NoteColorPicker
+                            value={note.style.backgroundColor || ''}
+                            onChange={(color) =>
+                                setNote({ ...note, style: { backgroundColor: color } })
+                            }
+                        />
 
-                    <button
-                        className="note-btn round"
-                        onClick={() => {
-                            uploadFile()
-                            setEditMode(true)
-                        }}>
-                        <span className="material-symbols-outlined">image</span>
-                    </button>
-                    <div className="space"></div>
-                    <button className={'close-form-btn note-btn'} onClick={() => resetForm()}>
-                        Close
-                    </button>
-                </div>
+                        <button
+                            className="note-btn round"
+                            onClick={() => {
+                                uploadFile()
+                                setEditMode(true)
+                            }}>
+                            <span className="material-symbols-outlined">image</span>
+                        </button>
+                        <NoteLabelPicker
+                            value={note.labels}
+                            onChange={(labels) => setNote({ ...note, labels: labels })}
+                        />
+                        <div className="space"></div>
+                        <button className={'close-form-btn note-btn'} onClick={() => resetForm()}>
+                            Close
+                        </button>
+                    </div>
+                </React.Fragment>
             )}
         </div>
     )

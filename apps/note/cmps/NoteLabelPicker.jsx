@@ -90,13 +90,17 @@ export function NoteLabelPicker({ value = [], onChange }) {
                     </div>
                     <ul>
                         {labels.map((label) => (
-                            <li className="label-row" key={label.id}>
+                            <li
+                                className="label-row"
+                                key={label.id}
+                                onClick={() => changeLabelChecked(label, !isLabelChecked(label))}>
                                 <input
                                     onClick={(event) => event.stopPropagation()}
                                     type="checkbox"
-                                    onChange={(event) =>
+                                    onChange={(event) => {
+                                        event.stopPropagation()
                                         changeLabelChecked(label, event.target.checked)
-                                    }
+                                    }}
                                     checked={isLabelChecked(label)}
                                 />
                                 <span>{label.name}</span>
@@ -108,7 +112,7 @@ export function NoteLabelPicker({ value = [], onChange }) {
                             (label) => label.name.toLowerCase() === search.toLowerCase()
                         ) && (
                             <div className="create-new-label" onClick={() => createLabel(search)}>
-                                <span class="material-symbols-outlined">add</span>{' '}
+                                <span className="material-symbols-outlined">add</span>{' '}
                                 <span className="create-new-label-txt">
                                     Create '<b>{search}</b>'
                                 </span>
