@@ -23,6 +23,7 @@ export const emailService = {
     moveToTrash,
     saveDraft,
     getDateString,
+    bulkAction,
 }
 
 function query(filterBy = {}) {
@@ -176,6 +177,7 @@ function sendEmail(email) {
     email.sentAt = Date.now()
     email.from = loggedinUser.email
     email.folder = 'sent'
+    email.isRead = true
     return save(email)
 }
 
@@ -289,5 +291,34 @@ function getDateString(date) {
     } else {
         // Different year: show full date
         return date.toLocaleDateString()
+    }
+}
+
+function bulkAction(emailIds, action) {
+    switch (action) {
+        case 'archive':
+            return emailIds.reduce((promise, emailId) => 
+                promise.then(() =>  //after each resolved promise, get the email and archive it
+                    get(emailId).then(email => {
+                        email.folder = 'archive'
+                        return save(email)
+                    })
+                ), Promise.resolve()    //start with a resolved promise
+            )
+        case 'delete':
+            return emailIds.reduce((promise, emailId) => 
+                promise.then(() => remove(emailId)), Promise.resolve()
+            )
+        case 'toggleRead':
+            return emailIds.reduce((promise, emailId) => 
+                promise.then(() => 
+                    get(emailId).then(email => {
+                        email.isRead = !email.isRead
+                        return save(email)
+                    })
+                ), Promise.resolve()
+            )
+        default:
+            return Promise.reject(new Error(`Unknown bulk action: ${action}`))
     }
 }

@@ -1,4 +1,9 @@
-button {
+/* Scoped to book app only - removed global styles that affect other apps */
+
+/* Scoped buttons - only affect buttons within book app */
+.book-index button,
+.book-details button,
+.book-edit button {
     cursor: pointer;
     background-color: var(--clr2bg);
     margin: 0.5em;
@@ -8,17 +13,24 @@ button {
 }
 
 /* Add padding to buttons that don't have <a> children */
-button:not(:has(a)) {
+.book-index button:not(:has(a)),
+.book-details button:not(:has(a)),
+.book-edit button:not(:has(a)) {
     padding: 0.5em 0.8em;
 }
 
-button:hover {
+.book-index button:hover,
+.book-details button:hover,
+.book-edit button:hover {
     background-color: var(--clr2);
     color: white;
     transition: 0.3s;
 }
 
-input:focus {
+/* Scoped input focus - only affect inputs within book app */
+.book-index input:focus,
+.book-details input:focus,
+.book-edit input:focus {
     background-color: var(--clr1bg);
     transition: background-color 1s;
 }

@@ -1,56 +1,84 @@
-* {
-    box-sizing: border-box;
-    
-}
+/* Scoped to book app only - removed global styles that affect other apps */
 
-
-body {
-    margin: 0;
+/* Book app container - scope all book-specific styles here */
+.book-index,
+.book-details,
+.book-edit {
     color: var(--gray3);
     font-size: 1.2rem;
+}
+
+.book-index {
     background: url('../../img/a0f5e17c-8f13-4c5d-ab64-6b2b42767126.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Scoped headings - only affect headings within book app */
+.book-index h1,
+.book-index h2,
+.book-index h3,
+.book-index h4,
+.book-index h5,
+.book-index h6,
+.book-details h1,
+.book-details h2,
+.book-details h3,
+.book-details h4,
+.book-details h5,
+.book-details h6,
+.book-edit h1,
+.book-edit h2,
+.book-edit h3,
+.book-edit h4,
+.book-edit h5,
+.book-edit h6 {
     margin: .5em 0 .5em;
     font-family: 'Edu VIC WA NT Beginner', cursive;
 }
 
-p {
+/* Scoped paragraphs - only affect paragraphs within book app */
+.book-index p,
+.book-details p,
+.book-edit p {
     margin: 0 0 1em;
 }
 
-a {
+/* Scoped links - only affect links within book app */
+.book-index a,
+.book-details a,
+.book-edit a {
     text-decoration: none;
     color: unset;
 }
 
-
-
-/* Dont stretch my Media */
-img,
-embed,
-video,
-object {
+/* Scoped media - only affect media within book app */
+.book-index img,
+.book-index embed,
+.book-index video,
+.book-index object,
+.book-details img,
+.book-details embed,
+.book-details video,
+.book-details object,
+.book-edit img,
+.book-edit embed,
+.book-edit video,
+.book-edit object {
     max-width: 100%
 }
 
-/* Simple and useful CSS Debugging Technique */
+/* Simple and useful CSS Debugging Technique */
 .debug * {
     outline: 1px solid gold
 }
 
-button > a{
+/* Scoped button links - only affect buttons within book app */
+.book-index button > a,
+.book-details button > a,
+.book-edit button > a {
     display: block;
     width: 100%;
     height: 100%;
     padding: 0.5em 0.8em;
-    
 }
