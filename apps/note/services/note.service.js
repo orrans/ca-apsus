@@ -90,18 +90,6 @@ function _createNotes() {
                 ],
             },
             {
-                id: 'n202',
-                createdAt: 1732947010002,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#fafafa' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600',
-                    title: 'Sunset vibes',
-                },
-                labels: [{ id: 'l3', name: 'Travel' }],
-            },
-            {
                 id: 'n203',
                 createdAt: 1732947010003,
                 type: 'NoteTodos',
@@ -200,18 +188,6 @@ function _createNotes() {
                 labels: [{ id: 'l2', name: 'Personal' }],
             },
             {
-                id: 'n211',
-                createdAt: 1732947010011,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=600',
-                    title: 'Bike adventure',
-                },
-                labels: [{ id: 'l3', name: 'Travel' }],
-            },
-            {
                 id: 'n212',
                 createdAt: 1732947010012,
                 type: 'NoteTxt',
@@ -273,18 +249,6 @@ function _createNotes() {
                 style: { backgroundColor: '#e0fff4' },
                 info: { txt: 'New animation ideas for Ari and Neri stories' },
                 labels: [{ id: 'l2', name: 'Personal' }],
-            },
-            {
-                id: 'n218',
-                createdAt: 1732947010018,
-                type: 'NoteImg',
-                isPinned: true,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=600',
-                    title: 'Calm forest',
-                },
-                labels: [{ id: 'l5', name: 'Health' }],
             },
             {
                 id: 'n219',
@@ -431,18 +395,6 @@ function _createNotes() {
                 labels: [{ id: 'l1', name: 'Work' }],
             },
             {
-                id: 'n302',
-                createdAt: 1732948010002,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#fafafa' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=70&w=600',
-                    title: 'City reflections',
-                },
-                labels: [{ id: 'l3', name: 'Travel' }],
-            },
-            {
                 id: 'n303',
                 createdAt: 1732948010003,
                 type: 'NoteTodos',
@@ -513,18 +465,6 @@ function _createNotes() {
                 labels: [{ id: 'l1', name: 'Work' }],
             },
             {
-                id: 'n309',
-                createdAt: 1732948010009,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=70&w=600',
-                    title: 'Morning sun rays',
-                },
-                labels: [{ id: 'l2', name: 'Personal' }],
-            },
-            {
                 id: 'n310',
                 createdAt: 1732948010010,
                 type: 'NoteTxt',
@@ -559,18 +499,6 @@ function _createNotes() {
                 labels: [{ id: 'l2', name: 'Personal' }],
             },
             {
-                id: 'n313',
-                createdAt: 1732948010013,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=70&w=600',
-                    title: 'Foggy morning',
-                },
-                labels: [{ id: 'l3', name: 'Travel' }],
-            },
-            {
                 id: 'n314',
                 createdAt: 1732948010014,
                 type: 'NoteTxt',
@@ -603,18 +531,6 @@ function _createNotes() {
                 style: { backgroundColor: '#ede7f6' },
                 info: { txt: 'Concept ideas for next drawing session' },
                 labels: [{ id: 'l6', name: 'Art' }],
-            },
-            {
-                id: 'n317',
-                createdAt: 1732948010017,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?q=70&w=600',
-                    title: 'Waves crashing',
-                },
-                labels: [{ id: 'l3', name: 'Travel' }],
             },
             {
                 id: 'n318',
@@ -772,18 +688,6 @@ function _createNotes() {
                 labels: [{ id: 'l1', name: 'Work' }],
             },
             {
-                id: 'n402',
-                createdAt: 1732949010002,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#fafafa' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1496483648148-47c686dc86a8?q=70&w=600',
-                    title: 'Vintage camera',
-                },
-                labels: [{ id: 'l6', name: 'Art' }],
-            },
-            {
                 id: 'n403',
                 createdAt: 1732949010003,
                 type: 'NoteTodos',
@@ -806,18 +710,6 @@ function _createNotes() {
                 style: { backgroundColor: '#f3e5f5' },
                 info: { txt: 'Think about ideas for 2D animation course' },
                 labels: [{ id: 'l6', name: 'Art' }],
-            },
-            {
-                id: 'n405',
-                createdAt: 1732949010005,
-                type: 'NoteImg',
-                isPinned: true,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b6?q=70&w=600',
-                    title: 'Running trail',
-                },
-                labels: [{ id: 'l5', name: 'Health' }],
             },
             {
                 id: 'n406',
@@ -844,18 +736,6 @@ function _createNotes() {
                 labels: [{ id: 'l1', name: 'Work' }],
             },
             {
-                id: 'n408',
-                createdAt: 1732949010008,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=70&w=600',
-                    title: 'Happy morning',
-                },
-                labels: [{ id: 'l2', name: 'Personal' }],
-            },
-            {
                 id: 'n409',
                 createdAt: 1732949010009,
                 type: 'NoteTxt',
@@ -871,18 +751,6 @@ function _createNotes() {
                 isPinned: false,
                 style: { backgroundColor: '#e8f5e9' },
                 info: { txt: 'List new ideas for Playwright automation scripts' },
-                labels: [{ id: 'l1', name: 'Work' }],
-            },
-            {
-                id: 'n411',
-                createdAt: 1732949010011,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=70&w=600',
-                    title: 'Minimal desk',
-                },
                 labels: [{ id: 'l1', name: 'Work' }],
             },
             {
@@ -955,18 +823,6 @@ function _createNotes() {
                 labels: [{ id: 'l1', name: 'Work' }],
             },
             {
-                id: 'n418',
-                createdAt: 1732949010018,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=70&w=600',
-                    title: 'Blue ocean',
-                },
-                labels: [{ id: 'l3', name: 'Travel' }],
-            },
-            {
                 id: 'n419',
                 createdAt: 1732949010019,
                 type: 'NoteTxt',
@@ -998,18 +854,6 @@ function _createNotes() {
                 style: { backgroundColor: '#f3e5f5' },
                 info: { txt: 'Ideas for new plugins in the IDE project' },
                 labels: [{ id: 'l1', name: 'Work' }],
-            },
-            {
-                id: 'n422',
-                createdAt: 1732949010022,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=70&w=600',
-                    title: 'Clean workspace',
-                },
-                labels: [{ id: 'l2', name: 'Personal' }],
             },
             {
                 id: 'n423',
@@ -1063,18 +907,6 @@ function _createNotes() {
                 isPinned: false,
                 style: { backgroundColor: '#e8eaf6' },
                 info: { txt: 'Write weekly study recap' },
-                labels: [{ id: 'l2', name: 'Personal' }],
-            },
-            {
-                id: 'n428',
-                createdAt: 1732949010028,
-                type: 'NoteImg',
-                isPinned: false,
-                style: { backgroundColor: '#ffffff' },
-                info: {
-                    url: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?q=70&w=600',
-                    title: 'Coffee break',
-                },
                 labels: [{ id: 'l2', name: 'Personal' }],
             },
             {
