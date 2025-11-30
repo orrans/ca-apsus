@@ -52,18 +52,12 @@ function _createLabels() {
     let labels = utilService.loadFromStorage(LABEL_KEY)
     if (!labels || !labels.length) {
         labels = [
-            {
-                id: 'n101',
-                name: 'Work',
-            },
-            {
-                id: 'n102',
-                name: 'School',
-            },
-            {
-                id: 'n103',
-                name: 'Home',
-            },
+            { id: 'l1', name: 'Work' },
+            { id: 'l2', name: 'Personal' },
+            { id: 'l3', name: 'Travel' },
+            { id: 'l4', name: 'Home' },
+            { id: 'l5', name: 'Health' },
+            { id: 'l6', name: 'Art' },
         ]
         utilService.saveToStorage(LABEL_KEY, labels)
     }

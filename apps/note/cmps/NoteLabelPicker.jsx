@@ -43,15 +43,17 @@ export function NoteLabelPicker({ value = [], onChange }) {
     }
 
     function isLabelChecked(label) {
-        return value.some((currLabel) => currLabel.id === label.id)
+        return (value || []).some((currLabel) => currLabel && currLabel.id === label.id)
     }
 
     function changeLabelChecked(label, checked) {
-        let newLabels = [...value]
+        const current = (value || []).filter((l) => l)
+        let newLabels = []
         if (checked) {
-            newLabels.push(label)
+            newLabels = [...current]
+            if (!newLabels.some((l) => l && l.id === label.id)) newLabels.push(label)
         } else {
-            newLabels = newLabels.filter((currLabel) => currLabel.id != label.id)
+            newLabels = current.filter((currLabel) => currLabel && currLabel.id != label.id)
         }
         onChange(newLabels)
     }
@@ -89,28 +91,34 @@ export function NoteLabelPicker({ value = [], onChange }) {
                         <span className="material-symbols-outlined">search</span>
                     </div>
                     <ul>
-                        {labels.map((label) => (
-                            <li
-                                className="label-row"
-                                key={label.id}
-                                onClick={() => changeLabelChecked(label, !isLabelChecked(label))}>
-                                <input
-                                    onClick={(event) => event.stopPropagation()}
-                                    type="checkbox"
-                                    onChange={(event) => {
-                                        event.stopPropagation()
-                                        changeLabelChecked(label, event.target.checked)
-                                    }}
-                                    checked={isLabelChecked(label)}
-                                />
-                                <span>{label.name}</span>
-                            </li>
-                        ))}
+                        {(labels || [])
+                            .filter((l) => l)
+                            .map((label) => (
+                                <li
+                                    className="label-row"
+                                    key={label.id}
+                                    onClick={() =>
+                                        changeLabelChecked(label, !isLabelChecked(label))
+                                    }>
+                                    <input
+                                        onClick={(event) => event.stopPropagation()}
+                                        type="checkbox"
+                                        onChange={(event) => {
+                                            event.stopPropagation()
+                                            changeLabelChecked(label, event.target.checked)
+                                        }}
+                                        checked={isLabelChecked(label)}
+                                    />
+                                    <span>{label.name}</span>
+                                </li>
+                            ))}
                     </ul>
                     {search &&
-                        !labels.some(
-                            (label) => label.name.toLowerCase() === search.toLowerCase()
-                        ) && (
+                        !(labels || [])
+                            .filter((l) => l)
+                            .some(
+                                (label) => (label.name || '').toLowerCase() === search.toLowerCase()
+                            ) && (
                             <div className="create-new-label" onClick={() => createLabel(search)}>
                                 <span className="material-symbols-outlined">add</span>{' '}
                                 <span className="create-new-label-txt">
