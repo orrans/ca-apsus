@@ -1,4 +1,5 @@
 import { labelService } from '../services/label.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 
 const { useState, useEffect } = React
 
@@ -7,6 +8,8 @@ export function LabelsSidebar({ onFilter, label: labelProp }) {
 
     useEffect(() => {
         loadLabels()
+        const unsubscribe = eventBusService.on('labelsChanged', () => loadLabels())
+        return () => unsubscribe()
     }, [])
 
     function loadLabels() {
@@ -25,7 +28,7 @@ export function LabelsSidebar({ onFilter, label: labelProp }) {
             {labels.map((label) => (
                 <button
                     key={label.id}
-                    onClick={() => onFilter(label)}
+                    onClick={() => onFilter(label.id)}
                     className={`note-btn sidebar-label ${
                         label.id === labelProp ? 'selected' : ''
                     }`}>

@@ -2,6 +2,7 @@
 
 import { utilService } from '../../../services/util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 
 const LABEL_KEY = 'labelDB'
 _createLabels()
@@ -29,14 +30,23 @@ function get(labelId) {
 }
 
 function remove(labelId) {
-    return storageService.remove(LABEL_KEY, labelId)
+    return storageService.remove(LABEL_KEY, labelId).then((res) => {
+        eventBusService.emit('labelsChanged', { removedId: labelId })
+        return res
+    })
 }
 
 function save(label) {
     if (label.id) {
-        return storageService.put(LABEL_KEY, label)
+        return storageService.put(LABEL_KEY, label).then((saved) => {
+            eventBusService.emit('labelsChanged', saved)
+            return saved
+        })
     } else {
-        return storageService.post(LABEL_KEY, label)
+        return storageService.post(LABEL_KEY, label).then((saved) => {
+            eventBusService.emit('labelsChanged', saved)
+            return saved
+        })
     }
 }
 

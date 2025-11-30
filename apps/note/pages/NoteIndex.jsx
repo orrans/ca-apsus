@@ -1,4 +1,5 @@
 import { noteService } from '../services/note.service.js'
+import { labelService } from '../services/label.service.js'
 import { NoteList } from '../cmps/NoteList.jsx'
 import { CreateNoteForm } from '../cmps/CreateNoteForm.jsx'
 import { eventBusService } from '../../../services/event-bus.service.js'
@@ -35,9 +36,36 @@ export function NoteIndex() {
             handleSearchActive
         )
 
+        const removeLabelsSub = eventBusService.on('labelsChanged', (payload) => {
+            if (!payload) return
+
+            if (payload.removedId) {
+                setNotes((prevNotes) => {
+                    const updated = prevNotes.map((note) => ({
+                        ...note,
+                        labels: (note.labels || []).filter((l) => l && l.id !== payload.removedId),
+                    }))
+                    noteService.saveAll(updated)
+                    return updated
+                })
+            } else if (payload.id) {
+                setNotes((prevNotes) => {
+                    const updated = prevNotes.map((note) => ({
+                        ...note,
+                        labels: (note.labels || []).map((l) =>
+                            l && l.id === payload.id ? payload : l
+                        ),
+                    }))
+                    noteService.saveAll(updated)
+                    return updated
+                })
+            }
+        })
+
         return () => {
             removeSubscribeSearch()
             removeSubscribeSearchActive()
+            removeLabelsSub()
         }
     }, [])
 
@@ -50,15 +78,11 @@ export function NoteIndex() {
     }, [labelFilter])
 
     function loadNotes() {
-        noteService
-            //move only the sort to service
-            .query()
-            .then((notes) => setNotes(notes)) //.sort((a, b) => b.createdAt - a.createdAt)))
+        noteService.query().then((notes) => setNotes(notes)) //.sort((a, b) => b.createdAt - a.createdAt)))
     }
 
     function searchNotes(search) {
         noteService
-            //move only the sort to service
             .query({ txt: search, type: filterType, label: labelFilter })
             .then((notes) => setNotes(notes.sort((a, b) => b.createdAt - a.createdAt)))
     }
@@ -112,9 +136,7 @@ export function NoteIndex() {
             })
     }
 
-    function labeChange(label) {
-        setLabelFilter(label)
-    }
+    // simplified: set label filter directly where used
 
     function updateFilterType(type) {
         setFilterType(type)
@@ -152,10 +174,7 @@ export function NoteIndex() {
                 onDuplicate={onDuplicateNote}
                 onUpdateNotes={onUpdateNotes}
             />
-            <LabelsSidebar
-                label={labelFilter}
-                onFilter={(label) => labeChange(label ? label.id : null)}
-            />
+            <LabelsSidebar label={labelFilter} onFilter={(labelId) => setLabelFilter(labelId)} />
         </section>
     )
 }
