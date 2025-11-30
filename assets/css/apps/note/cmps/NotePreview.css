@@ -118,3 +118,9 @@
         }
     }
 }
+
+@media (max-width: 1200px) {
+    .actions {
+        opacity: 1;
+    }
+}
