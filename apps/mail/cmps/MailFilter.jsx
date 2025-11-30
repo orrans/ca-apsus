@@ -1,11 +1,19 @@
 import { emailService } from "../services/mail.service.js"
 
-const { useState } = React
+const { useState, useEffect } = React
 
 export function MailFilter({ defaultFilter, onSetFilter }) {
 
     const [filterByToEdit, setFilterByToEdit] = useState({ ...defaultFilter })
     const [availableCategories, setAvailableCategories] = useState([])
+
+    // Sync filterByToEdit when defaultFilter.txt changes externally (e.g., from URL or folder change)
+    // Only sync if the defaultFilter.txt is different from current, to avoid interfering with user typing
+    useEffect(() => {
+        if (defaultFilter.txt !== filterByToEdit.txt) {
+            setFilterByToEdit(prevFilter => ({ ...prevFilter, txt: defaultFilter.txt || '' }))
+        }
+    }, [defaultFilter.txt])
 
     function handleChange({ target }) {
         const field = target.name
